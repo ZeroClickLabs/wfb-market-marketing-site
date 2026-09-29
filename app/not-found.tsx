@@ -7,10 +7,10 @@ export const metadata: Metadata = { title: "Page not found" };
 export default function NotFound() {
   return (
     <SiteShell>
-      <Band ground="kraft" className="wfb-intro wfb-lost">
-        <Illustration name="carrots" />
+      <Band ground="kraft" intro className="text-center">
+        <Illustration name="carrots" className="mb-5 w-[200px] -rotate-8" />
         <SectionHeading as="h1" eyebrow="Oh, carrots" title="This stall's empty" lead="The page you're after has packed up, or it was never here. Try the front of the market." />
-        <div className="wfb-row wfb-intro-actions">
+        <div className="wfb-row mt-5 justify-center">
           <Button variant="accent" href="/">Go home</Button>
           <Button variant="outline" href="/vendors">Meet the vendors</Button>
         </div>

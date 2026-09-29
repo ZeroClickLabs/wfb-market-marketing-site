@@ -14,7 +14,6 @@ export interface ArgoProgramItem {
   title: string;
   text: string;
   icon: IconName;
-  ornament: "gift" | "star" | "cookie" | "mug" | "bauble";
   time?: string;
   status: ArgoStatus;
 }
@@ -45,15 +44,15 @@ export interface ArgoSponsor {
 }
 
 const program: ArgoProgramItem[] = [
-  { id: "shop", title: "Shop local", icon: "basket", ornament: "gift", status: "confirmed",
+  { id: "shop", title: "Shop local", icon: "basket", status: "confirmed",
     text: "A curated group of about 18 local makers, shops and small businesses, with gifts, seasonal goods, treats and more." },
-  { id: "santa", title: "Meet Santa", icon: "clock", ornament: "star", status: "planned", time: "About 2–4 pm",
+  { id: "santa", title: "Meet Santa", icon: "clock", status: "planned", time: "About 2–4 pm",
     text: "Santa and Mrs. Claus are planning to visit The Argo for family visits and photos." },
-  { id: "cookies", title: "Decorate Christmas cookies", icon: "leaf", ornament: "cookie", status: "planned",
+  { id: "cookies", title: "Decorate Christmas cookies", icon: "leaf", status: "planned",
     text: "A staffed cookie-decorating table for children, free for families." },
-  { id: "treats", title: "Holiday treats & drinks", icon: "sun", ornament: "mug", status: "planned",
+  { id: "treats", title: "Holiday treats & drinks", icon: "sun", status: "planned",
     text: "We're lining up cocoa, coffee and seasonal food with local partners." },
-  { id: "village", title: "Explore Whitefish Bay", icon: "map-pin", ornament: "bauble", status: "confirmed",
+  { id: "village", title: "Explore Whitefish Bay", icon: "map-pin", status: "confirmed",
     text: "Make an afternoon of it: visit the shops, restaurants and businesses throughout the village." },
 ];
 
@@ -94,7 +93,7 @@ export const argo = {
   promo: {
     /** The home page feature shows from this date through the event day. */
     from: "2026-09-01",
-    line: "Local makers. Santa. Family activities. Holiday magic in Whitefish Bay.",
+    line: "",
   },
 };
 

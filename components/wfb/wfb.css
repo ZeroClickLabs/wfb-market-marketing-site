@@ -249,16 +249,9 @@ select.wfb-field-input { appearance: none; padding-right: 44px; cursor: pointer;
 
 
 /* ================================================================== App additions
-   Things the reference leaves to the app shell (page layout, the mobile menu) and
-   fixes for accessibility rules in the brand kit that the reference misses. */
-
-/* Home page layout (inline styles in the reference HomePage) */
-.wfb-section-after-awning { padding-top: 40px; }
-.wfb-section-after-wave { padding-top: var(--space-7); }
-.wfb-section-cta { justify-content: center; margin-top: 40px; }
-.wfb-explore-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px var(--space-5); justify-items: center; }
-/* min() keeps tickets from overflowing narrow phones (the reference uses a flat 420px). */
-.wfb-events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: var(--space-5); }
+   Things the kit components need that the reference leaves to the app (the mobile menu) and
+   fixes for accessibility rules in the brand kit that the reference misses.
+   Page layout lives in Tailwind utilities, not here. */
 
 /* Icon-only utility links get a 44px target. */
 .wfb-utility a.wfb-utility-icon { justify-content: center; min-width: 44px; min-height: 44px; margin: -2px -10px; }
@@ -266,6 +259,25 @@ select.wfb-field-input { appearance: none; padding-right: 44px; cursor: pointer;
 /* Newsletter: every field gets a visible label (the reference hides it). */
 .wfb-news form { align-items: flex-end; }
 .wfb-news-label { flex: 1 0 100%; font: 800 13px/16px var(--font-sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); margin-bottom: -4px; }
+
+/* Seamless section edges. Sections carry the paper grain as an overlay (.wfb-grain: the noise at
+   alpha .5, the layer at opacity .22, multiplied). Edges on those grounds get the same grain as a
+   background layer, with the opacity baked in (.5 × .22 = .11), so a wave, the section above and the
+   section below read as one surface. Dark theme: screen at .08 (.5 × .08 = .04). */
+:root, [data-theme="light"] { --wfb-grain-layer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .1 0 0 0 0 .08 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E"); --wfb-grain-blend: multiply; }
+[data-theme="dark"] { --wfb-grain-layer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .1 0 0 0 0 .08 0 0 0 .04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E"); --wfb-grain-blend: screen; }
+.wfb-edge-wrap[data-grain], .wfb-edge-wave[data-grain] { background-image: var(--wfb-grain-layer); background-blend-mode: var(--wfb-grain-blend); }
+.wfb-edge-awning[data-grain] {
+  background-image: var(--wfb-grain-layer), repeating-linear-gradient(90deg, var(--a) 0 40px, var(--b) 40px 80px);
+  background-size: auto, 100% 22px; background-position: 0 0, top; background-repeat: repeat, no-repeat;
+  background-blend-mode: var(--wfb-grain-blend), normal;
+}
+
+/* One rule under the header, not the reference's double rule. */
+.wfb-header::after { content: none; }
+
+/* No hard line between the newsletter and the footer's wave. */
+.wfb-news { border-bottom: 0; }
 
 /* Mobile menu (SiteHeader.md: "Below 900px the links collapse. Pair the header with a menu button.") */
 .wfb-menu-btn { display: none; align-items: center; gap: 8px; height: var(--control-md); padding: 0 18px; margin-left: auto;
@@ -278,7 +290,7 @@ select.wfb-field-input { appearance: none; padding-right: 44px; cursor: pointer;
   .wfb-menu-btn { display: inline-flex; }
   .wfb-header-cta { display: none; }
   .wfb-header-logo { position: relative; z-index: 2; }
-  .wfb-menu-panel:not([hidden]) { z-index: 1; display: flex; flex-direction: column; gap: var(--space-4); position: absolute; top: calc(100% + 9px); left: 0; right: 0;
+  .wfb-menu-panel:not([hidden]) { z-index: 1; display: flex; flex-direction: column; gap: var(--space-4); position: absolute; top: 100%; left: 0; right: 0;
     padding: var(--space-5) var(--space-6) var(--space-6); padding-left: max(var(--space-6), 176px); background: var(--canvas); border-bottom: 2px solid var(--ink); box-shadow: var(--shadow-soft); }
   .wfb-menu-nav { display: flex; flex-direction: column; }
   .wfb-menu-nav a { display: flex; align-items: center; min-height: 48px; color: var(--ink); text-decoration: none; border-bottom: 1.5px dashed var(--hairline);

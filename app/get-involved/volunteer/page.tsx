@@ -15,7 +15,7 @@ export default function VolunteerPage() {
       <Edge from="kraft" to="canvas" />
       <Band ground="canvas">
         <SectionHeading eyebrow="Sunday, December 13" title="Christmas at The Argo" lead="Christmas at The Argo needs a warm welcome. These jobs are planned; we'll confirm shift times in November." />
-        <div className="wfb-row" style={{ justifyContent: "center", marginBottom: 24 }}><Badge tone="info" icon="calendar">Planned</Badge></div>
+        <div className="wfb-row mb-5 justify-center"><Badge tone="info" icon="calendar">Planned</Badge></div>
         <CardGrid>
           {argoJobs.map((j) => (
             <InfoCard key={j.title} icon={j.icon} title={j.title} meta={<span><Icon name="clock" size={16} />{j.time}</span>}>{j.text}</InfoCard>

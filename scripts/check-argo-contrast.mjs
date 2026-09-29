@@ -1,11 +1,11 @@
 // Checks every text pairing in the Christmas at The Argo palette against WCAG AA (4.5:1).
-// Reads the --argo-* colours straight from components/argo/argo.css. Run: node scripts/check-argo-contrast.mjs
+// Reads the --color-argo-* colours straight from app/globals.css. Run: node scripts/check-argo-contrast.mjs
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../components/argo/argo.css"), "utf8");
-const colours = Object.fromEntries([...css.matchAll(/--argo-([a-z-]+):\s*(#[0-9a-f]{6})/gi)].map((m) => [m[1], m[2]]));
+const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../app/globals.css"), "utf8");
+const colours = Object.fromEntries([...css.matchAll(/--color-argo-([a-z-]+):\s*(#[0-9a-f]{6})/gi)].map((m) => [m[1], m[2]]));
 
 // [text, ground] pairs the page actually uses.
 const PAIRS = [
@@ -24,7 +24,7 @@ const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)]; return (Math.max(x, y
 
 let failed = 0;
 for (const [text, ground] of PAIRS) {
-  if (!colours[text] || !colours[ground]) { console.log(`missing --argo-${!colours[text] ? text : ground}`); failed++; continue; }
+  if (!colours[text] || !colours[ground]) { console.log(`missing --color-argo-${!colours[text] ? text : ground}`); failed++; continue; }
   const r = ratio(colours[text], colours[ground]);
   const ok = r >= 4.5;
   if (!ok) failed++;

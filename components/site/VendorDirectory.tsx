@@ -3,6 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Button, CATEGORY_LABELS, Checkbox, Icon, Notice, Tag, TextField, VendorCard, type Category, type VendorCardProps } from "@/components/wfb";
+import { cx } from "@/components/wfb/utils";
 
 export interface DirectoryVendor {
   card: VendorCardProps;
@@ -15,6 +16,16 @@ export interface DirectoryVendor {
 function isCategory(v: string | null): v is Category {
   return !!v && v in CATEGORY_LABELS;
 }
+
+// A category Tag as a toggle button (Tag.md): lifts on hover and stays lifted, with a check, when pressed.
+const FILTER = cx(
+  "inline-grid min-h-[44px] cursor-pointer place-items-center rounded-sm border-0 bg-transparent p-0",
+  "focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-focus focus-visible:outline-solid",
+  "[&_.wfb-tag]:h-9 [&_.wfb-tag]:px-3.5 [&_.wfb-tag]:text-[12px] [&_.wfb-tag]:transition-[transform,box-shadow] [&_.wfb-tag]:duration-140 [&_.wfb-tag]:ease-out",
+  "hover:[&_.wfb-tag]:-translate-0.5 hover:[&_.wfb-tag]:shadow-print-sm",
+  "aria-pressed:[&_.wfb-tag]:-translate-0.5 aria-pressed:[&_.wfb-tag]:border-[2.5px] aria-pressed:[&_.wfb-tag]:shadow-print-sm",
+  "motion-reduce:[&_.wfb-tag]:transition-none motion-reduce:[&_.wfb-tag]:translate-none",
+);
 
 /** The vendor grid with category, SNAP/EBT and name filters, kept in the URL so views can be shared. */
 export function VendorDirectory({ vendors }: { vendors: DirectoryVendor[] }) {
@@ -64,21 +75,20 @@ export function VendorDirectory({ vendors }: { vendors: DirectoryVendor[] }) {
   };
 
   return (
-    <div className="wfb-directory">
-      <div className="wfb-filters">
-        <div className="wfb-filter-group" role="group" aria-label="Filter by category">
-          <button type="button" className="wfb-filter" aria-pressed={category === null} onClick={() => pick(null)}>
+    <div>
+      <div className="mb-5 grid gap-5 rounded-lg border-3 border-ink bg-paper p-5 max-tablet:p-4">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
+          <button type="button" className={FILTER} aria-pressed={category === null} onClick={() => pick(null)}>
             <Tag>{category === null ? <Icon name="check-circle" size={14} /> : null}All</Tag>
           </button>
           {categories.map((c) => (
-            <button key={c} type="button" className="wfb-filter" aria-pressed={category === c} onClick={() => pick(category === c ? null : c)}>
+            <button key={c} type="button" className={FILTER} aria-pressed={category === c} onClick={() => pick(category === c ? null : c)}>
               <Tag category={c}>{category === c ? <Icon name="check-circle" size={14} /> : null}{CATEGORY_LABELS[c]}</Tag>
             </button>
           ))}
         </div>
-        <div className="wfb-filter-row">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-5 max-tablet:grid-cols-1 [&_.wfb-check]:items-center [&_.wfb-check]:pt-0">
           <TextField
-            className="wfb-filter-search"
             label="Search vendors"
             hint="By name or product, like “honey”"
             type="search"
@@ -99,7 +109,7 @@ export function VendorDirectory({ vendors }: { vendors: DirectoryVendor[] }) {
         </div>
       </div>
 
-      <p className="wfb-directory-count" aria-live="polite">
+      <p className="mt-0 mb-4 font-sans text-[14px] leading-[20px] font-bold text-ink-muted" aria-live="polite">
         Showing {shown.length} of {vendors.length} vendors
       </p>
 

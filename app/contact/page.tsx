@@ -15,11 +15,11 @@ export default function ContactPage() {
       <PageIntro eyebrow="Say hello" title="Contact us" lead="We're volunteers, so we answer within a week. At Christmas at The Argo, find us at the welcome table by the door." />
       <Edge from="kraft" to="canvas" />
       <Band ground="canvas">
-        <h2 className="wfb-sr">Ways to reach us</h2>
+        <h2 className="sr-only">Ways to reach us</h2>
         <CardGrid min={240}>
           <InfoCard icon="mail" title="Email" action={<a className="wfb-btn wfb-btn-link" href={`mailto:${site.email}`}>{site.email}</a>}>For anything at all.</InfoCard>
           <InfoCard icon="tent" title="In person">At Christmas at The Argo on December 13, and at the info tent every Saturday from summer 2027.</InfoCard>
-          <InfoCard icon="map-pin" title="Post">{site.mailingAddress.map((l) => <span key={l} style={{ display: "block" }}>{l}</span>)}</InfoCard>
+          <InfoCard icon="map-pin" title="Post">{site.mailingAddress.map((l) => <span key={l} className="block">{l}</span>)}</InfoCard>
           <InfoCard icon="instagram" title="Instagram" action={<a className="wfb-btn wfb-btn-link" href={site.social.instagram}>Follow the Market</a>}>Maker announcements for Christmas at The Argo, and news as we get ready for 2027.</InfoCard>
         </CardGrid>
       </Band>

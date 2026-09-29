@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Button, Logo, Notice, SectionHeading } from "@/components/wfb";
-import { Band, Edge, EventTickets, FactList, LeafList, PageIntro, SiteShell } from "@/components/site";
+import { Band, Edge, EventTickets, FactList, LeafList, PageIntro, SiteShell, Split, Subhead, BodyText, ButtonRow } from "@/components/site";
 import { events, getEvent, upcoming } from "@/content/events";
 import { formatDate, formatTimeRange, mapsUrl, todayISO } from "@/content/format";
 import { markets } from "@/content/markets";
@@ -63,17 +63,17 @@ export default async function EventPage({ params }: PageProps<"/events/[slug]">)
 
       <Edge from="kraft" to="canvas" />
       <Band ground="canvas">
-        <div className="wfb-split">
+        <Split>
           <div>
-            <h2 className="wfb-subhead">What&rsquo;s on</h2>
+            <Subhead>What&rsquo;s on</Subhead>
             <LeafList items={event.whatsOn} />
           </div>
           <div>
-            <h2 className="wfb-subhead">Paying</h2>
-            <p className="wfb-body">Most stalls take cards. Buy tokens with a card or SNAP/EBT at the info tent, and we&rsquo;ll match EBT up to $20 for fruit and vegetables.</p>
+            <Subhead>Paying</Subhead>
+            <BodyText>Most stalls take cards. Buy tokens with a card or SNAP/EBT at the info tent, and we&rsquo;ll match EBT up to $20 for fruit and vegetables.</BodyText>
             <Button variant="link" iconAfter="arrow-right" href="/food-access">How Market Match works</Button>
           </div>
-        </div>
+        </Split>
       </Band>
 
       {more.length ? (
@@ -82,9 +82,9 @@ export default async function EventPage({ params }: PageProps<"/events/[slug]">)
           <Band ground="kraft">
             <SectionHeading eyebrow="Save the date" title={`More ${market.name === "Pop-Up Markets" ? "pop-ups" : market.name + "s"}`} />
             <EventTickets events={more} />
-            <div className="wfb-row wfb-band-cta">
+            <ButtonRow>
               <Button variant="outline" iconAfter="arrow-right" href="/events">All markets & events</Button>
-            </div>
+            </ButtonRow>
           </Band>
         </>
       ) : null}

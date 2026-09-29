@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Button, Logo, Notice, SectionHeading } from "@/components/wfb";
-import { Band, CardGrid, Edge, EventTickets, FactList, InfoCard, PageIntro, SiteShell } from "@/components/site";
+import { Band, CardGrid, Edge, EventTickets, FactList, InfoCard, PageIntro, SiteShell, ButtonRow } from "@/components/site";
 import { events, upcoming } from "@/content/events";
 import { markets } from "@/content/markets";
 
@@ -47,9 +47,9 @@ export default function NightMarketPage() {
           <InfoCard icon="tent" title="Food trucks">Dinner from local food trucks, with seating along the street.</InfoCard>
           <InfoCard icon="card" title="SNAP/EBT welcome">Market Match at the info tent, just like Saturday mornings.</InfoCard>
         </CardGrid>
-        <div className="wfb-row wfb-band-cta">
+        <ButtonRow>
           <Button variant="outline" iconAfter="arrow-right" href="/events">All markets & events</Button>
-        </div>
+        </ButtonRow>
       </Band>
     </SiteShell>
   );

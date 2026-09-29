@@ -1,6 +1,14 @@
 /*
- * Tailwind is loaded without its preflight reset so the brand components render exactly
- * like brand/reference. Utilities sit in the last layer, so they can adjust a component.
+ * Styling: Tailwind utilities, themed with the brand tokens.
+ *
+ * - The 24 brand-kit components (components/wfb) keep the kit's own reference CSS in
+ *   components/wfb/wfb.css, so they match brand/reference exactly and are easy to re-sync.
+ * - Everything else (pages, components/site, components/argo) is styled with utilities.
+ * - Tailwind's preflight reset is off so the kit components render exactly like the reference.
+ *   That means elements keep browser default margins: set m-0 / list-none p-0 where needed.
+ *   And border widths aren't zeroed: a style utility (border-dashed) applies to all four sides at the
+ *   browser's "medium" width, so write border-0 before a one-sided border (border-0 border-b-2 border-dashed).
+ * - Utilities sit in the last layer, so a utility on a kit component always wins over wfb.css.
  */
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
@@ -9,9 +17,6 @@
 /* The brand tokens, straight from the kit. Never hard-code a value a token covers. */
 @import "../brand/tokens/tokens.css" layer(base);
 @import "../components/wfb/wfb.css" layer(components);
-@import "../components/site/site.css" layer(components);
-/* Christmas at The Argo's separate holiday look, scoped to .argo. */
-@import "../components/argo/argo.css" layer(components);
 
 @layer base {
   :root {
@@ -21,7 +26,8 @@
   }
 }
 
-/* Tailwind theme mapped onto the brand tokens, replacing Tailwind's defaults: bg-kraft, text-ink, p-5, rounded-lg… */
+/* The Market's brand, mapped onto the kit's tokens (so the Night Market dark theme follows along):
+   bg-kraft, text-ink, p-5, rounded-lg, shadow-print, font-display… Tailwind's own palette is removed. */
 @theme inline {
   --color-*: initial;
   --color-canvas: var(--canvas);
@@ -57,6 +63,8 @@
   --color-beet-tint: var(--beet-tint);
   --color-focus: var(--focus);
 
+  /* The brand spacing scale. Note 5–9 differ from Tailwind's defaults: p-5 = 24px, p-6 = 32px,
+     p-7 = 48px, p-8 = 72px, p-9 = 112px. Other numbers keep Tailwind's 4px steps (p-10 = 40px). */
   --spacing-1: var(--space-1);
   --spacing-2: var(--space-2);
   --spacing-3: var(--space-3);
@@ -82,7 +90,89 @@
   --font-display: var(--font-display);
   --font-script: var(--font-script);
   --font-sans: var(--font-sans);
+  /* Christmas at The Argo: Playfair Display, matching the serif in the event logo. */
+  --font-argo: var(--font-argo-display), "Playfair Display", Georgia, serif;
 
+  /* max-w-content = the kit's 1200px page width. For reading width use max-w-(--prose-max):
+     Tailwind's built-in max-w-prose is 65ch, not the kit's 660px. */
   --container-content: var(--content-max);
-  --container-prose: var(--prose-max);
+
+  /* The kit's breakpoints. Desktop-first rules use max-*: max-desktop (≤900px), max-tablet (≤600px),
+     max-phone (≤420px). */
+  --breakpoint-phone: 26.3125rem;
+  --breakpoint-tablet: 37.5625rem;
+  --breakpoint-desktop: 56.3125rem;
+}
+
+/* Christmas at The Argo's separate holiday palette: bg-argo-red, text-argo-gold…
+   Every text pairing is checked by scripts/check-argo-contrast.mjs (all ≥ 4.5:1). */
+@theme static {
+  --color-argo-red: #8e1b1f;
+  --color-argo-red-deep: #5f1014;
+  --color-argo-green: #1d4a33;
+  --color-argo-green-deep: #123222;
+  --color-argo-gold: #e9b949;
+  --color-argo-gold-light: #f4cf72;
+  --color-argo-gold-text: #7f5300;
+  --color-argo-cream: #fbf1dc;
+  --color-argo-paper: #fffaf0;
+  --color-argo-ink: #2a1512;
+  --color-argo-ink-muted: #5c4038;
+}
+
+/* ------------------------------------------------------------------ Custom utilities
+   Motifs too intricate for one-off arbitrary values. */
+
+/* The Argo's candy-stripe band, used as a frame and between sections. */
+@utility argo-stripe {
+  height: 22px;
+  background: repeating-linear-gradient(-45deg, var(--color-argo-red) 0 12px, var(--color-argo-cream) 12px 24px);
+  border-block: 3px solid var(--color-argo-gold);
+}
+
+/* A row of marquee light bulbs. Static: nothing auto-plays. */
+@utility argo-lights {
+  height: 30px;
+  background: radial-gradient(circle at 50% 50%, #fff4d2 0 3px, var(--color-argo-gold) 3.5px 7px, rgba(233, 185, 73, 0.3) 7.5px 11px, transparent 11.5px) 9px 50% / 38px 30px repeat-x;
+  border-bottom: 2px solid var(--color-argo-red-deep);
+}
+
+/* A striped shop-window valance with a scalloped hem. */
+@utility argo-valance {
+  position: relative;
+  height: 34px;
+  background: repeating-linear-gradient(90deg, var(--color-argo-red) 0 30px, var(--color-argo-cream) 30px 60px);
+  border-bottom: 2px solid var(--color-argo-gold);
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 16px;
+    background:
+      radial-gradient(circle at 15px 0, var(--color-argo-red) 13px, var(--color-argo-gold) 13.5px 15px, transparent 15.5px) 0 0 / 60px 16px repeat-x,
+      radial-gradient(circle at 45px 0, var(--color-argo-cream) 13px, var(--color-argo-gold) 13.5px 15px, transparent 15.5px) 0 0 / 60px 16px repeat-x;
+  }
+}
+
+/* A faint scatter of gold stars on the dark holiday grounds, like wrapping paper. Pair with a bg colour. */
+@utility argo-sparkle {
+  background-image: radial-gradient(rgba(233, 185, 73, 0.16) 1.5px, transparent 2px), radial-gradient(rgba(233, 185, 73, 0.1) 1px, transparent 1.5px);
+  background-size: 46px 46px, 23px 23px;
+  background-position: 0 0, 11px 17px;
+}
+
+/* The white sunburst behind an illustration, as in the kit's VendorCard and CircleTile. */
+@utility sunburst {
+  background: repeating-conic-gradient(rgba(255, 255, 255, 0.45) 0 6deg, transparent 6deg 12deg);
+}
+
+/* Brand text links: bay with a corn underline. */
+@utility brand-link {
+  color: var(--bay);
+  text-decoration-line: underline;
+  text-decoration-color: var(--corn);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
 }

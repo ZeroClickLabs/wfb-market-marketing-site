@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Button, Notice } from "@/components/wfb";
 import { SiteShell } from "@/components/site";
+import { cx } from "@/components/wfb/utils";
 import { ArgoHero } from "@/components/argo/ArgoHero";
+import { ARGO_ROOT } from "@/components/argo/styles";
 import { MakersSection, ProgramSection, SponsorsSection, StorySection, StripeEdge, UpdatesSection, VillageSection, VisitSection } from "@/components/argo/parts";
 import { argo, argoPath } from "@/content/argo";
 import { formatDate, formatTimeRange, isPast, toMarketISO } from "@/content/format";
@@ -58,10 +60,15 @@ export default function ArgoPage() {
   ) : undefined;
 
   return (
-    <SiteShell section="events" newsletter={false} notice={notice}>
+    <SiteShell
+      section="events"
+      newsletter={false}
+      notice={notice}
+      // The Market footer's wave sits on whichever holiday ground ends the page.
+      className={cx("[&_.wfb-footer>.wfb-edge-wrap]:bg-none!", argo.sponsors.length || past ? "[&_.wfb-footer>.wfb-edge-wrap]:bg-argo-cream!" : "[&_.wfb-footer>.wfb-edge-wrap]:bg-argo-green!")}
+    >
       <EventJsonLd />
-      {/* data-ends tells the footer's wave which ground it sits on. */}
-      <div className="argo" data-ends={argo.sponsors.length || past ? "cream" : "green"}>
+      <div className={ARGO_ROOT}>
         <ArgoHero past={past} />
         <StorySection />
         <StripeEdge />

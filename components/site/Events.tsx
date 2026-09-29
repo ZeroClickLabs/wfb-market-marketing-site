@@ -6,7 +6,8 @@ import type { MarketEvent } from "@/content/types";
 /** Event tickets in date order, two columns on desktop (guidelines/20). */
 export function EventTickets({ events }: { events: MarketEvent[] }) {
   return (
-    <div className="wfb-events-grid">
+    // min() keeps tickets from overflowing narrow phones; a lone ticket doesn't stretch across the page.
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(min(420px,100%),1fr))] gap-5 has-[>:only-child]:mx-auto has-[>:only-child]:max-w-[580px]">
       {events.map((e) => (
         <EventCard
           key={e.slug}

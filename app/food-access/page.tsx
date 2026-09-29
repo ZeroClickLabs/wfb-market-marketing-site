@@ -18,7 +18,7 @@ export default function FoodAccessPage() {
         title="Food access"
         lead="When the Summer Market opens in 2027, we plan to accept SNAP/EBT at every stall and to match those dollars for fruit and vegetables through Market Match."
       >
-        <div className="wfb-row" style={{ justifyContent: "center", marginTop: 20 }}><Badge tone="info" icon="calendar">Planned for 2027</Badge></div>
+        <div className="wfb-row mt-[20px] justify-center"><Badge tone="info" icon="calendar">Planned for 2027</Badge></div>
       </PageIntro>
       <Edge from="kraft" to="sage" />
       <Band ground="sage">

@@ -19,15 +19,15 @@ export const site = {
   /** After this date the utility bar shows statusAfter instead. */
   statusUntil: "2026-12-13",
   statusAfter: "Opening summer 2027 · Saturdays by the lake",
-  email: "hello@example.org",
+  email: "hello@wfbmarkets.org",
   mailingAddress: ["Whitefish Bay Farmers Market Corp", "PO Box 000", "Whitefish Bay, WI 53217"],
   marketAddress: "Whitefish Bay, WI",
   social: { instagram: "#", facebook: "#" },
   announcement: {
     label: "Sunday, December 13",
-    text: "Christmas at The Argo is coming soon. Free admission.",
+    text: "Christmas at The Argo. Free admission.",
     href: "/christmas-at-the-argo",
-    linkText: "See what's happening",
+    linkText: "Learn more",
     /** The bar hides itself after this date. */
     until: "2026-12-13",
   } as { label?: string; text: string; href?: string; linkText?: string; until?: string } | null,
@@ -44,7 +44,7 @@ export const site = {
     { label: "Food access", href: "/food-access", icon: "card" as IconName },
     { label: "Upcoming events", href: "/events", icon: "calendar" as IconName },
   ],
-  footerVisit: ["Opening summer 2027", "Saturdays by the lake", "Whitefish Bay, Wisconsin"],
+  footerVisit: ["The Summer Market", "Coming summer 2027", "Whitefish Bay, Wisconsin"],
   footerExplore: [
     { label: "Christmas at The Argo", href: "/christmas-at-the-argo" },
     { label: "Events & markets", href: "/events" },

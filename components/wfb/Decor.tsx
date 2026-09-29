@@ -47,13 +47,25 @@ export interface SectionEdgeProps {
   className?: string;
 }
 
+// App addition: the grounds that sections draw with the paper grain (.wfb-grain). An edge on one of
+// these carries the same grain (see wfb.css), so the wave and the section read as one surface.
+const GRAINED: Tone[] = ["kraft", "canvas", "sage"];
+const grainAttr = (tone: Tone | undefined) => (tone && GRAINED.includes(tone) ? "" : undefined);
+
 export function SectionEdge({ kind = "awning", tone, alt, ground, flip, className }: SectionEdgeProps) {
   if (kind === "wave") {
+    const waveTone = tone ?? "deep";
     return (
-      <div className={cx("wfb-edge-wrap", className)} style={{ background: toneVar(ground), lineHeight: 0 }} aria-hidden="true">
+      <div
+        className={cx("wfb-edge-wrap", className)}
+        style={{ backgroundColor: toneVar(ground), lineHeight: 0 }}
+        data-grain={grainAttr(ground)}
+        aria-hidden="true"
+      >
         <div
           className="wfb-edge wfb-edge-wave"
-          style={{ "--c": toneVar(tone ?? "deep"), transform: flip ? "scaleY(-1)" : undefined } as CSSProperties}
+          style={{ "--c": toneVar(waveTone), transform: flip ? "scaleY(-1)" : undefined } as CSSProperties}
+          data-grain={grainAttr(waveTone)}
         />
       </div>
     );
@@ -62,6 +74,7 @@ export function SectionEdge({ kind = "awning", tone, alt, ground, flip, classNam
     <div
       className={cx("wfb-edge", "wfb-edge-awning", className)}
       style={{ "--a": toneVar(tone ?? "heirloom"), "--b": toneVar(alt ?? "paper"), backgroundColor: toneVar(ground) } as CSSProperties}
+      data-grain={grainAttr(ground)}
       aria-hidden="true"
     />
   );

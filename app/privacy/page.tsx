@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Band, Edge, PageIntro, Prose, SiteShell } from "@/components/site";
+import { Band, Edge, PageIntro, Prose, SiteShell, UpdatedNote } from "@/components/site";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
           <p>When we start accepting EBT in 2027, the card reader at the info tent will handle the payment. We won&rsquo;t write down names or card numbers, and we&rsquo;ll only keep totals so we can report how much Market Match was spent.</p>
           <h2>Your choices</h2>
           <p>Every Market Letter has an unsubscribe link. To see or delete anything we hold about you, email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
-          <p className="wfb-updated">{site.legalName} · Last updated September 2026.</p>
+          <UpdatedNote>{site.legalName} · Last updated September 2026.</UpdatedNote>
         </Prose>
       </Band>
     </SiteShell>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Button, CircleTile, SectionHeading } from "@/components/wfb";
-import { Band, Edge, PageIntro, SiteShell, SponsorList } from "@/components/site";
+import { Band, Edge, PageIntro, SiteShell, SponsorList, TileGrid } from "@/components/site";
 import { sponsorTiers } from "@/content/get-involved";
 
 export const metadata: Metadata = {
@@ -15,11 +15,11 @@ export default function GetInvolvedPage() {
       <Edge from="kraft" to="deep" />
       <Band ground="deep">
         <SectionHeading eyebrow="Pick a way in" title="Lend a hand" />
-        <div className="wfb-explore-grid">
+        <TileGrid>
           <CircleTile label="Volunteer" illustration="sunflower" tone="bay-tint" note="Help run Christmas at The Argo, then the Summer Market." href="/get-involved/volunteer" />
           <CircleTile label="Sell with us" illustration="bread" tone="heirloom-tint" note="Applications for 2027 open in January." href="/get-involved/sell" />
           <CircleTile label="Sponsor" illustration="apple" tone="corn" note="Help launch Christmas at The Argo and our first season." href="/get-involved/sponsor" />
-        </div>
+        </TileGrid>
       </Band>
       <Edge from="deep" to="kraft" />
       <Band ground="kraft">

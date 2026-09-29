@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Band, Edge, PageIntro, Prose, SiteShell } from "@/components/site";
+import { Band, Edge, PageIntro, Prose, SiteShell, UpdatedNote } from "@/components/site";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -39,7 +39,7 @@ export default function AccessibilityPage() {
           </ul>
           <h2>Tell us what isn&rsquo;t working</h2>
           <p>If something on this site or at the market gets in your way, email <a href={`mailto:${site.email}`}>{site.email}</a> or find us at the info tent. We&rsquo;ll reply within a week and tell you what we&rsquo;ll do about it.</p>
-          <p className="wfb-updated">Last reviewed September 2026.</p>
+          <UpdatedNote>Last reviewed September 2026.</UpdatedNote>
         </Prose>
       </Band>
     </SiteShell>

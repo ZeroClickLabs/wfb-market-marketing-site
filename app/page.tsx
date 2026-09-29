@@ -1,5 +1,5 @@
 import { Button, CircleTile, Hero, SectionEdge, SectionHeading } from "@/components/wfb";
-import { EventTickets, SiteShell } from "@/components/site";
+import { ButtonRow, EventTickets, SiteShell, TileGrid } from "@/components/site";
 import { ArgoPromo } from "@/components/argo/ArgoPromo";
 import { argoPath } from "@/content/argo";
 import { upcoming } from "@/content/events";
@@ -14,46 +14,46 @@ export default function Home() {
   return (
     <SiteShell>
       <Hero
-        script={`Opening ${site.opening.toLowerCase()}`}
-        sub="Local growers, bakers and makers, live music and a lake breeze, every Saturday by the lake. Christmas at The Argo is coming this December."
+        script={`Coming ${site.opening.toLowerCase()}`}
+        sub="Local growers, bakers and makers, live music and a lake breeze, every Saturday at Klode Park."
         actions={[
-          <Button key="a" variant="accent" size="lg" iconAfter="arrow-right" href={argoPath}>Christmas at The Argo</Button>,
-          <Button key="b" variant="outline" size="lg" href="/visit">Our plans for 2027</Button>,
+          <Button key="a" variant="outline" size="lg" iconAfter="arrow-right" href={argoPath}>Learn more</Button>,
+          // <Button key="b" variant="accent" size="lg" href="/visit">Christmas at The Argo</Button>,
         ]}
       />
       <SectionEdge kind="awning" tone="heirloom" ground="kraft" />
 
-      <section className="wfb-section wfb-section-kraft wfb-grain wfb-section-after-awning">
+      <section className="wfb-section wfb-section-kraft wfb-grain pt-10 max-desktop:pt-7">
         <div className="wfb-container">
           <ArgoPromo />
           <SectionHeading eyebrow="Coming summer 2027" title="What you'll find" lead="Saturday mornings by the lake with growers, bakers and makers from close to home. Here's what we're planning to bring together." />
-          <div className="wfb-explore-grid wfb-find-grid">
+          <TileGrid compact>
             {whatYoullFind.map((t) => <CircleTile key={t.label} label={t.label} illustration={t.illustration} tone={t.tone} note={t.note} />)}
-          </div>
-          <div className="wfb-row wfb-section-cta">
+          </TileGrid>
+          <ButtonRow>
             <Button variant="outline" iconAfter="arrow-right" href="/get-involved/sell">Apply to sell in 2027</Button>
-          </div>
+          </ButtonRow>
         </div>
       </section>
 
       <SectionEdge kind="wave" tone="deep" ground="kraft" />
-      <section className="wfb-section wfb-section-deep wfb-on-deep wfb-section-after-wave">
+      <section className="wfb-section wfb-section-deep wfb-on-deep pt-7">
         <div className="wfb-container">
           <SectionHeading eyebrow="Explore" title="More than a market" />
-          <div className="wfb-explore-grid">
+          <TileGrid>
             {explore.map((t) => <CircleTile key={t.label} {...t} />)}
-          </div>
+          </TileGrid>
         </div>
       </section>
       <SectionEdge kind="wave" tone="deep" ground="canvas" flip />
 
-      <section className="wfb-section wfb-grain wfb-section-after-wave">
+      <section className="wfb-section wfb-grain pt-7">
         <div className="wfb-container">
           <SectionHeading eyebrow="Mark your calendar" title="Markets & events" lead="The Summer Market opens in June 2027. We'll announce the dates here first." />
           {coming.length ? <EventTickets events={coming} /> : null}
-          <div className="wfb-row wfb-section-cta">
+          <ButtonRow>
             <Button variant="outline" iconAfter="arrow-right" href="/events">All markets & events</Button>
-          </div>
+          </ButtonRow>
         </div>
       </section>
     </SiteShell>

@@ -38,7 +38,7 @@ export default function VisitPage() {
 
       <Band ground="kraft">
         <SectionHeading eyebrow="Opening 2027" title="The Summer Market" lead="Here's what we're planning. We'll confirm the details in spring 2027." />
-        <div className="wfb-row" style={{ justifyContent: "center", marginBottom: 24 }}><Badge tone="info" icon="calendar">Planned</Badge></div>
+        <div className="wfb-row mb-5 justify-center"><Badge tone="info" icon="calendar">Planned</Badge></div>
         <FactList facts={summerFacts} />
       </Band>
 
