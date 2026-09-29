@@ -1,0 +1,1 @@
+Brand patterns for print and backgrounds. `awning-stripe` (heirloom and paper, with ink scallops) is for edges, tote bags and stall skirts. `lake-waves` (`bay` and `glass` on `deep`) is a background texture for posters and A-frames, used at 20–35% over `deep`. `sprig-ornament` (corn) is the divider under titles; in the UI, use the `Ornament` component. Use one pattern per piece.

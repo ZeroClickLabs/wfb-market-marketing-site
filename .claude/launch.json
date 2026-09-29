@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 3000 },
+    { "name": "reference", "runtimeExecutable": "npx", "runtimeArgs": ["--yes", "http-server", "brand", "-p", "3101", "-s", "-c-1"], "port": 3101 }
+  ]
+}

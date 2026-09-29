@@ -1,0 +1,113 @@
+/* Whitefish Bay Farmers Market design tokens (generated from tokens.json). Light = "Daylight", dark = "Night Market". */
+:root, [data-theme="light"] {
+  --canvas: #f4ecdc;
+  --paper: #fbf7ef;
+  --kraft: #e8dcc3;
+  --hairline: #d3c29f;
+  --border-control: #857357;
+  --ink: #1a2226;
+  --ink-muted: #5a5347;
+  --deep: #0e2a36;
+  --on-deep: #f4ecdc;
+  --bay: #1c5169;
+  --bay-strong: #143e51;
+  --on-bay: #ffffff;
+  --bay-tint: #d8e6e7;
+  --glass: #a9cdd3;
+  --heirloom: #b8402b;
+  --heirloom-strong: #8e2f1f;
+  --on-heirloom: #ffffff;
+  --heirloom-text: #a13823;
+  --heirloom-tint: #f4d8cd;
+  --corn: #f0b43c;
+  --on-corn: #1a2226;
+  --corn-text: #7a5600;
+  --corn-tint: #f8e7be;
+  --sage: #9bb08b;
+  --kale: #3d6234;
+  --on-kale: #ffffff;
+  --kale-text: #375a2f;
+  --kale-tint: #dfe7d2;
+  --beet: #6d2f4f;
+  --on-beet: #ffffff;
+  --beet-tint: #eedce4;
+  --focus: #0e2a36;
+  --shadow-print: 4px 4px 0 #1a2226;
+  --shadow-print-sm: 2px 2px 0 #1a2226;
+  --shadow-soft: 0 10px 30px rgba(26,34,38,0.18);
+}
+[data-theme="dark"] {
+  --canvas: #0c212b;
+  --paper: #12303d;
+  --kraft: #1b3a48;
+  --hairline: #2a4a57;
+  --border-control: #6f8c96;
+  --ink: #f4ecdc;
+  --ink-muted: #b7c4c4;
+  --deep: #081820;
+  --on-deep: #f4ecdc;
+  --bay: #8cc3d3;
+  --bay-strong: #b3dbe5;
+  --on-bay: #0c212b;
+  --bay-tint: #173d4b;
+  --glass: #a9cdd3;
+  --heirloom: #ef8d6f;
+  --heirloom-strong: #f6ab93;
+  --on-heirloom: #2a0f05;
+  --heirloom-text: #f29f84;
+  --heirloom-tint: #43241b;
+  --corn: #f3c25b;
+  --on-corn: #1a2226;
+  --corn-text: #f3c25b;
+  --corn-tint: #3b3218;
+  --sage: #3d5335;
+  --kale: #a3cc93;
+  --on-kale: #10200c;
+  --kale-text: #a9d199;
+  --kale-tint: #22361d;
+  --beet: #d9a3c2;
+  --on-beet: #24101d;
+  --beet-tint: #3a2433;
+  --focus: #f3c25b;
+  --shadow-print: 4px 4px 0 #040d11;
+  --shadow-print-sm: 2px 2px 0 #040d11;
+  --shadow-soft: 0 10px 30px rgba(0,0,0,0.5);
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+  --space-9: 112px;
+  --radius-sm: 3px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --control-sm: 38px;
+  --control-md: 48px;
+  --control-lg: 56px;
+  --content-max: 1200px;
+  --prose-max: 660px;
+  --scallop: 40px;
+  --outline: 3px;
+  --font-display: "League Gothic", "Arial Narrow", Impact, sans-serif;
+  --font-script: Yellowtail, "Brush Script MT", cursive;
+  --font-sans: "Public Sans", "Segoe UI", system-ui, sans-serif;
+}
+
+.display-hero { font-family: var(--font-display); font-size: 120px; line-height: 108px; font-weight: 400; letter-spacing: 0.01em; text-transform: uppercase; }
+.display-1 { font-family: var(--font-display); font-size: 80px; line-height: 76px; font-weight: 400; letter-spacing: 0.01em; text-transform: uppercase; }
+.display-2 { font-family: var(--font-display); font-size: 56px; line-height: 56px; font-weight: 400; letter-spacing: 0.015em; text-transform: uppercase; }
+.display-3 { font-family: var(--font-display); font-size: 36px; line-height: 38px; font-weight: 400; letter-spacing: 0.02em; text-transform: uppercase; }
+.script-l { font-family: var(--font-script); font-size: 48px; line-height: 52px; font-weight: 400; }
+.script-m { font-family: var(--font-script); font-size: 32px; line-height: 36px; font-weight: 400; }
+.heading-3 { font-family: var(--font-sans); font-size: 20px; line-height: 26px; font-weight: 800; }
+.body-l { font-family: var(--font-sans); font-size: 19px; line-height: 30px; font-weight: 400; }
+.body { font-family: var(--font-sans); font-size: 16px; line-height: 26px; font-weight: 400; }
+.body-s { font-family: var(--font-sans); font-size: 14px; line-height: 21px; font-weight: 400; }
+.eyebrow { font-family: var(--font-sans); font-size: 13px; line-height: 16px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.caption { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 400; }

@@ -1,26 +1,85 @@
-@import "tailwindcss";
+/*
+ * Tailwind is loaded without its preflight reset so the brand components render exactly
+ * like brand/reference. Utilities sit in the last layer, so they can adjust a component.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* The brand tokens, straight from the kit. Never hard-code a value a token covers. */
+@import "../brand/tokens/tokens.css" layer(base);
+@import "../components/wfb/wfb.css" layer(components);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --font-display: var(--font-league-gothic), "League Gothic", "Arial Narrow", Impact, sans-serif;
+    --font-script: var(--font-yellowtail), Yellowtail, "Brush Script MT", cursive;
+    --font-sans: var(--font-public-sans), "Public Sans", "Segoe UI", system-ui, sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Tailwind theme mapped onto the brand tokens, replacing Tailwind's defaults: bg-kraft, text-ink, p-5, rounded-lg… */
+@theme inline {
+  --color-*: initial;
+  --color-canvas: var(--canvas);
+  --color-paper: var(--paper);
+  --color-kraft: var(--kraft);
+  --color-hairline: var(--hairline);
+  --color-border-control: var(--border-control);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-deep: var(--deep);
+  --color-on-deep: var(--on-deep);
+  --color-bay: var(--bay);
+  --color-bay-strong: var(--bay-strong);
+  --color-on-bay: var(--on-bay);
+  --color-bay-tint: var(--bay-tint);
+  --color-glass: var(--glass);
+  --color-heirloom: var(--heirloom);
+  --color-heirloom-strong: var(--heirloom-strong);
+  --color-on-heirloom: var(--on-heirloom);
+  --color-heirloom-text: var(--heirloom-text);
+  --color-heirloom-tint: var(--heirloom-tint);
+  --color-corn: var(--corn);
+  --color-on-corn: var(--on-corn);
+  --color-corn-text: var(--corn-text);
+  --color-corn-tint: var(--corn-tint);
+  --color-sage: var(--sage);
+  --color-kale: var(--kale);
+  --color-on-kale: var(--on-kale);
+  --color-kale-text: var(--kale-text);
+  --color-kale-tint: var(--kale-tint);
+  --color-beet: var(--beet);
+  --color-on-beet: var(--on-beet);
+  --color-beet-tint: var(--beet-tint);
+  --color-focus: var(--focus);
+
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-7: var(--space-7);
+  --spacing-8: var(--space-8);
+  --spacing-9: var(--space-9);
+
+  --radius-*: initial;
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-*: initial;
+  --shadow-print: var(--shadow-print);
+  --shadow-print-sm: var(--shadow-print-sm);
+  --shadow-soft: var(--shadow-soft);
+
+  --font-*: initial;
+  --font-display: var(--font-display);
+  --font-script: var(--font-script);
+  --font-sans: var(--font-sans);
+
+  --container-content: var(--content-max);
+  --container-prose: var(--prose-max);
 }
