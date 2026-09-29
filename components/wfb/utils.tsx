@@ -20,8 +20,8 @@ export function useArt(key: string) {
   return { __html: (ART[key] ?? "").split("__U__").join(uid) };
 }
 
-/** An <a> that uses client-side navigation for internal routes. */
+/** An <a> that uses client-side navigation for internal pages (not files like .ics). */
 export function SmartLink({ href, ...rest }: AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) {
-  if (href.startsWith("/")) return <Link href={href} {...rest} />;
+  if (href.startsWith("/") && !/\.[a-z0-9]+$/i.test(href.split(/[?#]/)[0])) return <Link href={href} {...rest} />;
   return <a href={href} {...rest} />;
 }

@@ -121,6 +121,8 @@ select.wfb-field-input { appearance: none; padding-right: 44px; cursor: pointer;
 .wfb-header::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; background: var(--ink); }
 .wfb-header .wfb-container { display: flex; align-items: center; gap: var(--space-5); min-height: 88px; }
 .wfb-header-logo { flex: none; width: 128px; height: 128px; margin: 0 0 -58px; align-self: flex-start; margin-top: 8px; filter: drop-shadow(4px 4px 0 rgba(26,34,38,.9)); }
+/* The Logo sets an inline width; let it follow the link's size so the badge can shrink on phones. */
+.wfb-header-logo > .wfb-logo { display: block; width: 100% !important; height: 100%; }
 .wfb-header-logo img { width: 100%; height: 100%; display: block; }
 .wfb-nav { display: flex; gap: 4px; margin-left: auto; }
 .wfb-nav a { display: inline-flex; align-items: center; height: 44px; padding: 0 14px; color: var(--ink); text-decoration: none; font: 800 13px/1 var(--font-sans); letter-spacing: .14em; text-transform: uppercase; position: relative; }
@@ -290,9 +292,9 @@ select.wfb-field-input { appearance: none; padding-right: 44px; cursor: pointer;
 
 @media (max-width: 600px) {
   .wfb-container { padding: 0 var(--space-4); }
-  .wfb-header-logo { width: 96px; height: 96px; margin-bottom: -42px; }
+  .wfb-header-logo { width: 76px; height: 76px; margin-bottom: -30px; }
   .wfb-header .wfb-container { min-height: 72px; }
-  .wfb-menu-panel:not([hidden]) { padding-left: var(--space-4); padding-right: var(--space-4); padding-top: 56px; }
+  .wfb-menu-panel:not([hidden]) { padding-left: var(--space-4); padding-right: var(--space-4); padding-top: 44px; }
   .wfb-hero-title { font-size: 68px; line-height: 64px; }
   .wfb-hero-script { font-size: 40px; line-height: 46px; }
   .wfb-hero-copy { padding: 44px var(--space-4) 0; }

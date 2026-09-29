@@ -7,6 +7,7 @@ import { MobileMenu } from "./MobileMenu";
 import { NewsletterForm } from "./NewsletterForm";
 import { cx, SmartLink, type Tone } from "./utils";
 import { site } from "@/content/site";
+import { isPast } from "@/content/format";
 
 export interface AnnouncementBarProps {
   children: ReactNode;
@@ -40,7 +41,7 @@ export interface SiteHeaderProps {
   className?: string;
 }
 
-export function SiteHeader({ links = site.nav, cta = site.headerCta, status = site.status, homeHref = "/", className }: SiteHeaderProps) {
+export function SiteHeader({ links = site.nav, cta = site.headerCta, status = isPast(site.statusUntil) ? site.statusAfter : site.status, homeHref = "/", className }: SiteHeaderProps) {
   const navLinks = (
     <>
       {links.map((l) => (
@@ -50,17 +51,18 @@ export function SiteHeader({ links = site.nav, cta = site.headerCta, status = si
   );
   return (
     <div className={cx("wfb", className)}>
-      <div className="wfb-utility">
+      {/* <div className="wfb-utility" role="region" aria-label="Market status">
         <div className="wfb-container">
-          <span className="wfb-utility-open"><span className="wfb-utility-dot" aria-hidden="true" />{status}</span>
+          <span className="wfb-utility-open">{site.inSeason ? <span className="wfb-utility-dot" aria-hidden="true" /> : null}{status}</span>
           <span className="wfb-utility-links">
-            <SmartLink href="/food-access"><Icon name="card" size={16} />SNAP/EBT welcome</SmartLink>
-            <SmartLink href="/events"><Icon name="calendar" size={16} />Market calendar</SmartLink>
+            {site.utilityLinks.map((l) => (
+              <SmartLink key={l.href} href={l.href}><Icon name={l.icon} size={16} />{l.label}</SmartLink>
+            ))}
             <a className="wfb-utility-icon" href={site.social.instagram} aria-label="Instagram"><Icon name="instagram" size={18} /></a>
             <a className="wfb-utility-icon" href={site.social.facebook} aria-label="Facebook"><Icon name="facebook" size={18} /></a>
           </span>
         </div>
-      </div>
+      </div> */}
       <header className="wfb-header">
         <div className="wfb-container">
           <SmartLink className="wfb-header-logo" href={homeHref} aria-label="Whitefish Bay Farmers Market, home">
@@ -80,7 +82,7 @@ export function SiteHeader({ links = site.nav, cta = site.headerCta, status = si
 
 export function NewsletterBand({ title, text, illustration = "sunflower", className }: { title?: string; text?: string; illustration?: IllustrationName; className?: string }) {
   return (
-    <section className={cx("wfb", "wfb-news", "wfb-grain", className)} aria-label="Newsletter">
+    <section id="newsletter" className={cx("wfb", "wfb-news", "wfb-grain", className)} aria-label="Newsletter">
       <div className="wfb-container">
         <div className="wfb-news-art"><Illustration name={illustration} /></div>
         <div>
@@ -99,10 +101,10 @@ export function SiteFooter({ year = new Date().getFullYear(), above = "sage", cl
       <SectionEdge kind="wave" tone="deep" ground={above} />
       <div className="wfb-container">
         <div className="wfb-footer-top">
-          <div className="wfb-footer-logo"><Logo variant="emblem" width={180} /></div>
+          <div className="wfb-footer-logo"><Logo variant="badge" width={180} /></div>
           <div>
             <h2 className="wfb-footer-h">Visit</h2>
-            <p>Saturdays, June–September<br />8 am–1 pm · rain or shine<br />Whitefish Bay, Wisconsin</p>
+            <p>{site.footerVisit.map((line, i) => <span key={line}>{i ? <br /> : null}{line}</span>)}</p>
             <p className="wfb-footer-script">See you by the lake</p>
           </div>
           <div>
@@ -115,6 +117,7 @@ export function SiteFooter({ year = new Date().getFullYear(), above = "sage", cl
             <h2 className="wfb-footer-h">Say hello</h2>
             <ul>
               <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+              <li><SmartLink href="/contact">Contact us</SmartLink></li>
               <li><SmartLink href="/get-involved/sell">Apply to sell</SmartLink></li>
             </ul>
             <div className="wfb-social">
