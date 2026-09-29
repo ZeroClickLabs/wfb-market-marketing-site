@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Button, Logo, Notice, SectionHeading } from "@/components/wfb";
 import { Band, CardGrid, Edge, EventTickets, FactList, InfoCard, PageIntro, SiteShell, ButtonRow } from "@/components/site";
 import { events, upcoming } from "@/content/events";
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
   description: "Music, food trucks and the lake at dusk. The Night Market is planned for summer evenings from 2027.",
 };
 
-const night = markets.find((m) => m.id === "night")!;
-
 export default function NightMarketPage() {
+  // The page exists only while the Night Market is listed in content/markets.ts.
+  const night = markets.find((m) => m.id === "night");
+  if (!night) notFound();
   const dates = upcoming(events.filter((e) => e.market === "night"));
   return (
     <SiteShell section="events" theme="dark">

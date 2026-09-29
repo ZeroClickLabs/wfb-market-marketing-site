@@ -24,7 +24,8 @@ export default async function EventPage({ params }: PageProps<"/events/[slug]">)
   const event = getEvent((await params).slug);
   if (!event) notFound();
 
-  const market = markets.find((m) => m.id === event.market)!;
+  const market = markets.find((m) => m.id === event.market);
+  if (!market) notFound();
   const past = event.date < todayISO();
   const more = upcoming().filter((e) => e.slug !== event.slug && e.market === event.market).slice(0, 2);
   const logo = LOGO[event.market];
