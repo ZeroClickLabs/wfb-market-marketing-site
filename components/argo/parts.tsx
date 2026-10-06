@@ -2,7 +2,7 @@
 import type { ReactNode } from "react";
 import { Button, Icon } from "@/components/wfb";
 import { cx } from "@/components/wfb/utils";
-import { FactList, StubForm } from "@/components/site";
+import { FactList, SubscribeCard } from "@/components/site";
 import { argo, visibleProgram, type ArgoMaker, type ArgoStatus } from "@/content/argo";
 import { formatDate, formatTimeRange, mapsUrl, todayISO, toMarketISO } from "@/content/format";
 import { ARGO_ACTIONS, ARGO_BODY, ARGO_BUTTON, ARGO_CARD, ARGO_H2, ARGO_KICKER } from "./styles";
@@ -256,12 +256,12 @@ export function UpdatesSection() {
             <Button variant="accent" icon="instagram" href={argo.updates.instagram} className={ARGO_BUTTON.accent}>Follow on Instagram</Button>
           </div>
         </div>
-        <StubForm
+        <SubscribeCard
           tone="argo"
+          source="christmas-at-the-argo"
           title="Event updates sign-up"
-          fields={[{ kind: "email", name: "email", label: "Email address", hint: "Just for news about Christmas at The Argo.", required: true, autoComplete: "email", requiredMessage: "Enter your email address." }]}
+          hint="You'll get the Market Letter, with Christmas at The Argo news as it's announced."
           submitLabel="Get event updates"
-          emailSubject="Christmas at The Argo updates"
         />
       </div>
     </ArgoSection>

@@ -11,7 +11,7 @@ export type SectionKey = "visit" | "vendors" | "events" | "food-access" | "get-i
 export const site = {
   name: "Whitefish Bay Farmers Market",
   legalName: "Whitefish Bay Farmers Market Corp",
-  url: "https://example.org",
+  url: "https://wfbmarkets.org",
   opening: "Summer 2027",
   /** Shows the green "open" dot in the utility bar. */
   inSeason: false,

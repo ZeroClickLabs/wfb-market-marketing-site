@@ -23,7 +23,7 @@ export default function PrivacyPage() {
             <li><strong>This website:</strong> no advertising or tracking cookies. Fonts are served from our own site, not from a third party.</li>
           </ul>
           <h2>What we do with it</h2>
-          <p>Volunteers on the Market&rsquo;s board read it to answer you and run the market. We don&rsquo;t sell or share it, except with the service that sends our email, which only uses it to deliver messages.</p>
+          <p>Volunteers on the Market&rsquo;s board read it to answer you and run the market. We don&rsquo;t sell or share it. The Market Letter is sent with <a href="https://www.beehiiv.com/privacy">beehiiv</a>, which stores subscribers&rsquo; email addresses for us and only uses them to deliver the newsletter.</p>
           <h2>SNAP/EBT at the market</h2>
           <p>When we start accepting EBT in 2027, the card reader at the info tent will handle the payment. We won&rsquo;t write down names or card numbers, and we&rsquo;ll only keep totals so we can report how much Market Match was spent.</p>
           <h2>Your choices</h2>
