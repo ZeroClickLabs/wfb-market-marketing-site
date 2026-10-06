@@ -45,7 +45,7 @@ export interface ArgoSponsor {
 
 const program: ArgoProgramItem[] = [
   { id: "shop", title: "Shop local", icon: "basket", status: "confirmed",
-    text: "A curated group of about 18 local makers, shops and small businesses, with gifts, seasonal goods, treats and more." },
+    text: "A small, hand-picked group of local makers, shops and small businesses, with gifts, seasonal goods, treats and more." },
   { id: "santa", title: "Meet Santa", icon: "clock", status: "planned", time: "About 2–4 pm",
     text: "Santa and Mrs. Claus are planning to visit The Argo for family visits and photos." },
   { id: "cookies", title: "Decorate Christmas cookies", icon: "leaf", status: "planned",
@@ -79,7 +79,8 @@ export const argo = {
   ],
   storyMarks: ["Local", "Curated", "Family-friendly", "Free to attend"],
   program,
-  makersExpected: 18,
+  /** Set to true once every maker is announced: the "More makers to come" card goes and the intro says it's the full line-up. */
+  makersComplete: false,
   /** Add makers here as they're announced. The reveal grid appears as soon as there's one. */
   makers: [] as ArgoMaker[],
   /** Village shops and restaurants taking part. */

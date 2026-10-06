@@ -137,20 +137,28 @@ function isNew(m: ArgoMaker, today = todayISO()) {
   return days >= 0 && days <= 14;
 }
 
+const MAKER_CARD = "flex-[0_1_300px] max-tablet:basis-full";
+
 export function MakersSection() {
-  const makers = argo.makers;
+  const { makers, makersComplete } = argo;
+  const updatesHref = "/christmas-at-the-argo#updates";
   return (
     <ArgoSection ground="cream" id="makers" labelledBy="argo-makers">
       <ArgoHeading
         id="argo-makers"
-        kicker="Meet the makers & merchants"
-        title="Local makers, curated"
-        lead={makers.length ? `${makers.length} of about ${argo.makersExpected} announced so far, with more to come.` : undefined}
+        kicker="Meet the makers"
+        title="A small, hand-picked line-up"
+        lead={
+          makersComplete
+            ? "Meet everyone who'll be at The Argo on December 13."
+            : "We're keeping it small and local: a handful of makers and merchants, chosen with care."
+        }
       />
       {makers.length ? (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(250px,100%),1fr))] gap-5">
+        // Centred rows, so any number of makers, from one to a handful, looks deliberate.
+        <div className="flex flex-wrap justify-center gap-5">
           {makers.map((m) => (
-            <article className={ARGO_CARD} key={m.name}>
+            <article className={cx(ARGO_CARD, MAKER_CARD)} key={m.name}>
               {m.image || m.logo ? (
                 <div className="-mx-5 -mt-5 mb-1.5 grid aspect-[4/3] place-items-center overflow-hidden rounded-t-[11px] border-b-3 border-argo-gold bg-argo-cream">
                   {m.image ? (
@@ -160,7 +168,7 @@ export function MakersSection() {
                   )}
                 </div>
               ) : null}
-              <h3 className="m-0 font-sans text-[20px] leading-[26px] font-extrabold [&_a]:text-inherit [&_a]:no-underline [&_a]:after:absolute [&_a]:after:inset-0 [&_a]:after:content-['']">
+              <h3 className="m-0 font-argo text-[25px] leading-[1.2] font-bold text-argo-red [&_a]:text-inherit [&_a]:no-underline [&_a]:after:absolute [&_a]:after:inset-0 [&_a]:after:content-['']">
                 {m.href ? <a href={m.href}>{m.name}</a> : m.name}
               </h3>
               <p className={CARD_TEXT}>{m.what}</p>
@@ -172,20 +180,26 @@ export function MakersSection() {
               ) : null}
             </article>
           ))}
+          {makersComplete ? null : (
+            // A placeholder at the end of the row while the line-up is still being announced.
+            <aside className={cx(MAKER_CARD, "flex flex-col justify-center gap-2.5 rounded-[14px] border-3 border-dashed border-argo-gold-text p-5 text-center text-argo-ink")}>
+              <p className="m-0 font-argo text-[22px] leading-[1.2] font-bold text-argo-red">More makers to come</p>
+              <p className={CARD_TEXT}>We&rsquo;ll add each one here as they&rsquo;re confirmed.</p>
+              <a className="mt-1 inline-flex min-h-[44px] items-center justify-center gap-2 font-sans text-[15px] font-bold text-argo-green underline decoration-argo-gold decoration-2 underline-offset-4" href={updatesHref}>
+                <Icon name="mail" size={16} />
+                Get event updates
+              </a>
+            </aside>
+          )}
         </div>
       ) : (
-        <div className="mx-auto grid max-w-[860px] grid-cols-[auto_minmax(0,1fr)] items-center gap-6 rounded-[14px] border-3 border-argo-gold bg-argo-paper p-6 shadow-[6px_6px_0_rgba(42,21,18,.18)] max-tablet:grid-cols-[minmax(0,1fr)] max-tablet:justify-items-center max-tablet:p-5 max-tablet:text-center">
-          <div aria-hidden="true" className="grid size-[150px] place-items-center rounded-full border-3 border-argo-gold bg-argo-red text-center text-argo-gold shadow-[0_0_0_6px_var(--color-argo-paper),0_0_0_9px_var(--color-argo-gold)]">
-            <div>
-              <b className="block font-argo text-[64px] leading-none font-bold">{argo.makersExpected}</b>
-              <span className="font-sans text-[11px] leading-[14px] font-extrabold uppercase tracking-[.14em] text-argo-cream">local makers</span>
-            </div>
-          </div>
-          <div>
-            <h3 className="mt-0 mb-2 font-argo text-[28px] leading-[1.2] font-bold text-argo-red">Announced soon</h3>
-            <p className="mt-0 mb-3 font-sans text-[18px] leading-[28px]">
-              We&rsquo;re bringing together a curated collection of about {argo.makersExpected} local makers, merchants and small businesses for Christmas at The Argo. Participating vendors will be announced soon.
-            </p>
+        <div className="mx-auto max-w-[680px] rounded-[14px] border-3 border-argo-gold bg-argo-paper p-6 text-center shadow-[6px_6px_0_rgba(42,21,18,.18)] max-tablet:p-5">
+          <h3 className="mt-0 mb-2 font-argo text-[28px] leading-[1.2] font-bold text-argo-red">The line-up is coming together</h3>
+          <p className="mt-0 mb-5 font-sans text-[18px] leading-[28px]">
+            We&rsquo;re inviting local makers, merchants and small businesses to The Argo, and we&rsquo;ll introduce each of them here as they&rsquo;re confirmed.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button variant="accent" icon="mail" href={updatesHref} className={ARGO_BUTTON.accent}>Get event updates</Button>
             <Button variant="outline" icon="instagram" href={argo.updates.instagram} className={ARGO_BUTTON.outlineOnLight}>Follow along</Button>
           </div>
         </div>
