@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useId } from "react";
+import { useActionState, useEffect, useId } from "react";
 import { subscribe } from "@/app/actions/newsletter";
 import { initialSubscribeState, type SignupSource } from "@/lib/newsletter";
+import { track } from "@/lib/analytics";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 
@@ -12,6 +13,11 @@ import { Icon } from "./Icon";
 export function NewsletterForm({ source = "market-letter" }: { source?: SignupSource }) {
   const id = useId();
   const [state, action, pending] = useActionState(subscribe, initialSubscribeState);
+
+  // Count a sign-up in Google Analytics only once beehiiv has accepted it.
+  useEffect(() => {
+    if (state.status === "subscribed" || state.status === "confirm") track("sign_up", { method: "newsletter", form: source });
+  }, [state.status, source]);
 
   if (state.status === "subscribed" || state.status === "confirm") {
     return (

@@ -1,11 +1,12 @@
 "use client";
 
-import { useActionState, useId } from "react";
+import { useActionState, useEffect, useId } from "react";
 import { Button, Notice, TextField } from "@/components/wfb";
 import { cx } from "@/components/wfb/utils";
 import { ARGO_BUTTON } from "@/components/argo/styles";
 import { subscribe } from "@/app/actions/newsletter";
 import { initialSubscribeState, type SignupSource } from "@/lib/newsletter";
+import { track } from "@/lib/analytics";
 
 export interface SubscribeCardProps {
   source: SignupSource;
@@ -21,6 +22,11 @@ export interface SubscribeCardProps {
 export function SubscribeCard({ source, title, hint, submitLabel = "Sign me up", tone = "market" }: SubscribeCardProps) {
   const id = useId();
   const [state, action, pending] = useActionState(subscribe, initialSubscribeState);
+
+  // Count a sign-up in Google Analytics only once beehiiv has accepted it.
+  useEffect(() => {
+    if (state.status === "subscribed" || state.status === "confirm") track("sign_up", { method: "newsletter", form: source });
+  }, [state.status, source]);
   const argo = tone === "argo";
   const done = state.status === "subscribed" || state.status === "confirm";
 

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { League_Gothic, Playfair_Display, Public_Sans, Yellowtail } from "next/font/google";
 import "./globals.css";
 import { site } from "@/content/site";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { gaMeasurementId } from "@/lib/analytics";
 
 // Self-hosted Google Fonts (display: swap). tokens.css names the families; globals.css
 // points the --font-* tokens at these so the fallbacks from tokens.json still apply.
@@ -24,10 +26,17 @@ export const metadata: Metadata = {
     "A farmers market by the lake in Whitefish Bay, opening summer 2027. Coming soon: Christmas at The Argo, Sunday, December 13.",
 };
 
+// Analytics runs only on production builds with NEXT_PUBLIC_GA_MEASUREMENT_ID set (see .env.example),
+// so local development never adds visits to the live reports.
+const gaId = process.env.NODE_ENV === "production" ? gaMeasurementId() : undefined;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" data-theme="light" className={`${display.variable} ${script.variable} ${sans.variable} ${argoDisplay.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        {gaId ? <GoogleAnalytics id={gaId} /> : null}
+      </body>
     </html>
   );
 }
