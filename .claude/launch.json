@@ -1,7 +1,42 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 3000 },
-    { "name": "reference", "runtimeExecutable": "npx", "runtimeArgs": ["--yes", "http-server", "brand", "-p", "3101", "-s", "-c-1"], "port": 3101 }
+    {
+      "name": "dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "reference",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "--yes",
+        "http-server",
+        "brand",
+        "-p",
+        "3101",
+        "-s",
+        "-c-1"
+      ],
+      "port": 3101
+    },
+    {
+      "name": "portal-preview",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "PORTAL_DEMO=1",
+        "npm",
+        "run",
+        "dev",
+        "--",
+        "-p",
+        "3001"
+      ],
+      "port": 3001
+    }
   ]
 }

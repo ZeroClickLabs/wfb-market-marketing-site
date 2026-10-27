@@ -23,6 +23,12 @@ function clock(t: string) {
   return { text: m ? `${h % 12 || 12}:${String(m).padStart(2, "0")}` : `${h % 12 || 12}`, meridiem: h < 12 ? "am" : "pm" };
 }
 
+/** "10:30 am", "1 pm". */
+export function formatTime(t: string) {
+  const c = clock(t);
+  return `${c.text} ${c.meridiem}`;
+}
+
 /** "8 am–1 pm", "5–9 pm". */
 export function formatTimeRange(start: string, end: string) {
   const a = clock(start), b = clock(end);

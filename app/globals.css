@@ -124,6 +124,20 @@
    Motifs too intricate for one-off arbitrary values. */
 
 /* The Argo's candy-stripe band, used as a frame and between sections. */
+/* A 44px-tall invisible hit area for a short text link that stands alone (in a table row, beside a
+   heading), so it meets the touch-target size without changing the layout. */
+@utility tap-target {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: max(100%, 44px);
+    transform: translateY(-50%);
+  }
+}
+
 @utility argo-stripe {
   height: 22px;
   background: repeating-linear-gradient(-45deg, var(--color-argo-red) 0 12px, var(--color-argo-cream) 12px 24px);
