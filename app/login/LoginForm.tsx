@@ -4,8 +4,8 @@ import { useActionState } from "react";
 import { Button, Notice, TextField } from "@/components/wfb";
 import { requestLogin, verifyCode, type LoginState } from "./actions";
 
-export function LoginForm({ next, error }: { next: string; error?: string }) {
-  const [state, send, sending] = useActionState(requestLogin, { step: "email", next, error } as LoginState);
+export function LoginForm({ next, error, email }: { next: string; error?: string; email?: string }) {
+  const [state, send, sending] = useActionState(requestLogin, { step: "email", next, error, email } as LoginState);
   const [codeState, verify, verifying] = useActionState(verifyCode, { step: "code" } as LoginState);
 
   if (state.step === "code") {

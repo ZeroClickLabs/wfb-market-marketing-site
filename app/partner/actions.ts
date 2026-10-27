@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requirePartner } from "@/lib/auth";
 import * as data from "@/lib/portal/data";
 import { canEmail } from "@/lib/email/config";
+import { sendUpdateNotices } from "@/lib/email/notify";
 import { AssetInput, EventNoteInput, Logistics, Task, checkUpload, fileToAsset, logisticsFields, parse, str, values } from "@/lib/portal/forms";
 import type { ActionState } from "@/app/portal/actions";
 
@@ -56,9 +57,18 @@ export async function postPartnerUpdateAction(_prev: ActionState, formData: Form
   const p = parse(PartnerUpdate, formData);
   if (!p.ok) return p.state;
   const email = p.data.email && canEmail();
-  const n = await data.createUpdate({ title: p.data.title, body: p.data.body, email, pinned: false, audience: { kind: "market", marketId }, authorOrg: org });
+  const posted = await data.createUpdate({ title: p.data.title, body: p.data.body, email, pinned: false, audience: { kind: "market", marketId }, authorOrg: org });
   revalidateMarket(marketId);
-  redirect(`/partner/${marketId}/updates?done=${email ? "emailed" : "posted"}&n=${n}`);
+  let done = email ? "emailed" : "posted";
+  if (email) {
+    try {
+      await sendUpdateNotices({ id: posted.id, title: p.data.title, body: p.data.body, vendorIds: posted.vendorIds, from: org });
+    } catch (e) {
+      console.error(e);
+      done = "emailfailed";
+    }
+  }
+  redirect(`/partner/${marketId}/updates?done=${done}&n=${posted.count}`);
 }
 
 export async function addPartnerAssetAction(_prev: ActionState, formData: FormData): Promise<ActionState> {

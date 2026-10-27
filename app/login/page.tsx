@@ -24,7 +24,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         <p className="mt-0 mb-5 font-sans text-[16px] leading-[25px] text-ink-muted">
           For vendors, event partners and the Market team. Your access comes from an invitation; ask us if you need one.
         </p>
-        <LoginForm next={next} error={error} />
+        <LoginForm next={next} error={error} email={typeof params.email === "string" ? params.email.slice(0, 200) : undefined} />
       </div>
     </PortalFrame>
   );

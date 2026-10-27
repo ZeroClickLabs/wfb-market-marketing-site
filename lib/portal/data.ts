@@ -78,3 +78,4 @@ export const getPartnerFor = (...args: Parameters<typeof demo.getPartnerFor>) =>
 export const addMarketPartner = (...args: Parameters<typeof demo.addMarketPartner>) => impl().addMarketPartner(...args);
 export const invitePartner = (...args: Parameters<typeof demo.invitePartner>) => impl().invitePartner(...args);
 export const removeMarketPartner = (...args: Parameters<typeof demo.removeMarketPartner>) => impl().removeMarketPartner(...args);
+export const emailTargets = (...args: Parameters<typeof demo.emailTargets>) => impl().emailTargets(...args);

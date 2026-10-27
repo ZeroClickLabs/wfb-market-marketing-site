@@ -127,6 +127,7 @@ const FLASH: Record<string, (n: string) => string> = {
   deleted: () => "Deleted.",
   saved: () => "Saved.",
   uploaded: () => "File added to the library.",
+  emailfailed: () => "Saved, but the email couldn't be sent. Check the Resend settings, then try again.",
 };
 
 /** Said after anything that would email someone, while email isn't going out. */
@@ -142,7 +143,7 @@ export function Flash({ done, n }: { done?: string | string[]; n?: string | stri
   if (!msg) return null;
   const emails = ["invited", "reminded", "emailed"].includes(code!);
   return (
-    <Notice tone={code === "cancelled" ? "warning" : "success"} className="mb-5">
+    <Notice tone={code === "cancelled" || code === "emailfailed" ? "warning" : "success"} className="mb-5">
       {msg}
       {emails ? noEmailNote() : ""}
     </Notice>

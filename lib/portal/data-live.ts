@@ -499,11 +499,11 @@ export async function setDateStatus(dateId: string, status: MarketDate["dateStat
   ok(await db.from("market_dates").update({ status }).eq("id", dateId));
 }
 
-/** Marks who's being reminded (invited, no reply yet) and returns them; the action sends the emails. */
+/** Marks who's being reminded (invited, no reply yet) and returns their vendor ids; the action sends the emails. */
 export async function remindNonResponders(dateId: string) {
   const db = await createClient();
   const rows = must(await db.from("participation").update({ reminded_at: new Date().toISOString() }).eq("market_date_id", dateId).eq("status", "invited").select("vendor_id"));
-  return rows.length;
+  return rows.map((r) => r.vendor_id);
 }
 
 /** The vendors an audience reaches: approved and active vendors (in the market), or the chosen ones. */
@@ -560,7 +560,7 @@ export async function createUpdate(input: { title: string; body: string; audienc
   // recipients themselves, so they're recorded with the secret key.
   const recipients = await resolveAudience(input.audience);
   if (recipients.length) ok(await createAdminClient().from("update_recipients").insert(recipients.map((v) => ({ update_id: u.id, vendor_id: v.id }))));
-  return recipients.length;
+  return { count: recipients.length, id: u.id, vendorIds: recipients.map((v) => v.id) };
 }
 
 export async function setUpdatePinned(id: string, pinned: boolean) {
@@ -820,13 +820,32 @@ export async function addMarketPartner(marketId: string, p: Pick<MarketPartner, 
 /** Records the invite (the action sends the email). */
 export async function invitePartner(marketId: string, partnerId: string) {
   const db = await createClient();
-  const rows = must(await db.from("market_partners").update({ invited_at: new Date().toISOString() }).eq("id", partnerId).eq("market_id", marketId).select("id"));
+  const rows = must(await db.from("market_partners").update({ invited_at: new Date().toISOString() }).eq("id", partnerId).eq("market_id", marketId).select("*"));
   if (!rows.length) throw new Error("Partner not found.");
+  return toPartner(rows[0]);
 }
 
 export async function removeMarketPartner(marketId: string, partnerId: string) {
   const db = await createClient();
   ok(await db.from("market_partners").delete().eq("id", partnerId).eq("market_id", marketId));
+}
+
+/**
+ * Who to email about these vendors: their contacts' addresses. For updates, people who've turned off
+ * update emails are left out; invites and reminders always go. Read with the secret key, because the
+ * sender (an admin, a partner or the reminder job) may not be able to read vendor contacts.
+ */
+export async function emailTargets(vendorIds: string[], purpose: "update" | "always"): Promise<{ vendorId: string; email: string; name: string }[]> {
+  if (!vendorIds.length) return [];
+  const admin = createAdminClient();
+  const [contacts, members] = await Promise.all([
+    admin.from("vendor_contacts").select("vendor_id, email, name, user_id").in("vendor_id", vendorIds),
+    admin.from("vendor_members").select("user_id, vendor_id, email_updates").in("vendor_id", vendorIds),
+  ]);
+  const optedOut = new Set(must(members).filter((m) => !m.email_updates).map((m) => `${m.vendor_id}:${m.user_id}`));
+  return must(contacts)
+    .filter((c) => purpose === "always" || !c.user_id || !optedOut.has(`${c.vendor_id}:${c.user_id}`))
+    .map((c) => ({ vendorId: c.vendor_id, email: c.email, name: c.name ?? "" }));
 }
 
 // Re-exported so the shapes line up with the preview module.

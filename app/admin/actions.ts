@@ -7,8 +7,8 @@ import { requireAdmin } from "@/lib/auth";
 import { todayISO } from "@/content/format";
 import * as data from "@/lib/portal/data";
 import { canEmail } from "@/lib/email/config";
+import { sendPartnerInvite, sendReminders, sendUpdateNotices, sendVendorInvite } from "@/lib/email/notify";
 import type { ActionState } from "@/app/portal/actions";
-import { noEmailNote } from "@/components/portal/ui";
 import { AssetInput, EventNoteInput, Logistics, Task, checkUpload, fileToAsset, isoDate, list, logisticsFields, parse, str, values } from "@/lib/portal/forms";
 import type { Audience, VendorStatus } from "@/lib/portal/types";
 
@@ -17,6 +17,17 @@ import type { Audience, VendorStatus } from "@/lib/portal/types";
 const STATUSES = ["lead", "applied", "approved", "active", "inactive", "declined"] as const;
 const NOTE_KINDS = ["note", "email", "call", "meeting"] as const;
 const MARKET_KINDS = ["summer", "night", "popup", "winter"] as const;
+
+/** Runs a send; the flash code to show is `ok`, or "emailfailed" if Resend refused (the change itself is saved). */
+async function emailing(send: () => Promise<number>, okCode: string) {
+  try {
+    await send();
+    return okCode;
+  } catch (e) {
+    console.error(e);
+    return "emailfailed";
+  }
+}
 
 // ---- Vendors ----------------------------------------------------------------------------------
 
@@ -73,9 +84,10 @@ export async function addContactAction(_prev: ActionState, formData: FormData): 
 export async function inviteContactAction(formData: FormData) {
   await requireAdmin();
   const vendorId = str(formData, "vendorId");
-  await data.inviteContact(vendorId, str(formData, "contactId"));
+  const contact = await data.inviteContact(vendorId, str(formData, "contactId"));
   revalidatePath("/admin", "layout");
-  redirect(`/admin/vendors/${vendorId}?done=invited`);
+  const done = await emailing(() => sendVendorInvite(vendorId, contact), "invited");
+  redirect(`/admin/vendors/${vendorId}?done=${done}`);
 }
 
 export async function publishProfileAction(formData: FormData) {
@@ -137,7 +149,7 @@ export async function inviteToMarketAction(_prev: ActionState, formData: FormDat
   const n = await data.inviteToMarket(marketId, ids, todayISO());
   revalidatePath("/admin", "layout");
   revalidatePath("/portal", "layout");
-  return { ok: true, message: `Invited ${n} ${n === 1 ? "vendor" : "vendors"} to every upcoming date.${noEmailNote()}` };
+  return { ok: true, message: `Added ${n} ${n === 1 ? "vendor" : "vendors"} to this market. They can reply to every upcoming date in the portal.` };
 }
 
 export async function setStallAction(formData: FormData) {
@@ -159,8 +171,11 @@ export async function setDateStatusAction(formData: FormData) {
 
 export async function remindAction(formData: FormData) {
   await requireAdmin();
-  const n = await data.remindNonResponders(str(formData, "dateId"));
-  redirect(`${str(formData, "back")}?done=reminded&n=${n}`);
+  const dateId = str(formData, "dateId");
+  const vendorIds = await data.remindNonResponders(dateId);
+  const roster = await data.getRoster(dateId);
+  const done = roster ? await emailing(() => sendReminders(roster.date, vendorIds), "reminded") : "reminded";
+  redirect(`${str(formData, "back")}?done=${done}&n=${vendorIds.length}`);
 }
 
 // ---- Updates --------------------------------------------------------------------------------------
@@ -183,10 +198,11 @@ export async function createUpdateAction(_prev: ActionState, formData: FormData)
   const { audience: a, vendorIds, ...rest } = p.data;
   const audience: Audience = a === "all" ? { kind: "all" } : a === "vendors" ? { kind: "vendors", vendorIds } : { kind: "market", marketId: a.replace(/^market:/, "") };
   const email = rest.email && canEmail();
-  const n = await data.createUpdate({ ...rest, email, audience });
+  const posted = await data.createUpdate({ ...rest, email, audience });
   revalidatePath("/admin", "layout");
   revalidatePath("/portal", "layout");
-  redirect(`/admin/updates?done=${email ? "emailed" : "posted"}&n=${n}`);
+  const done = email ? await emailing(() => sendUpdateNotices({ id: posted.id, title: rest.title, body: rest.body, vendorIds: posted.vendorIds }), "emailed") : "posted";
+  redirect(`/admin/updates?done=${done}&n=${posted.count}`);
 }
 
 export async function pinUpdateAction(formData: FormData) {
@@ -272,9 +288,10 @@ export async function addPartnerAction(_prev: ActionState, formData: FormData): 
 export async function invitePartnerAction(formData: FormData) {
   await requireAdmin();
   const marketId = str(formData, "marketId");
-  await data.invitePartner(marketId, str(formData, "partnerId"));
+  const partner = await data.invitePartner(marketId, str(formData, "partnerId"));
   revalidatePath(`/admin/markets/${marketId}`);
-  redirect(`/admin/markets/${marketId}?done=invited`);
+  const done = await emailing(() => sendPartnerInvite(partner), "invited");
+  redirect(`/admin/markets/${marketId}?done=${done}`);
 }
 
 export async function removePartnerAction(formData: FormData) {

@@ -328,7 +328,7 @@ export async function setDateStatus(dateId: string, status: MarketDate["dateStat
 
 /** Who'd get a reminder: invited vendors who haven't answered. With Supabase connected, this emails them. */
 export async function remindNonResponders(dateId: string) {
-  return store().participation.filter((p) => p.dateId === dateId && p.status === "invited").length;
+  return store().participation.filter((p) => p.dateId === dateId && p.status === "invited").map((p) => p.vendorId);
 }
 
 function resolveAudience(a: Audience) {
@@ -351,11 +351,12 @@ export async function listAdminUpdates(): Promise<AdminUpdate[]> {
 export async function createUpdate(input: { title: string; body: string; audience: Audience; pinned: boolean; email: boolean; authorOrg?: string }) {
   const now = new Date().toISOString();
   const recipients = resolveAudience(input.audience).map((v) => ({ vendorId: v.id, vendorName: v.name }));
+  const id = newId("u");
   store().updates.push({
-    id: newId("u"), title: input.title, body: input.body, audience: input.audience, pinned: input.pinned,
+    id, title: input.title, body: input.body, audience: input.audience, pinned: input.pinned,
     publishedAt: now, emailedAt: input.email ? now : undefined, recipients, authorOrg: input.authorOrg,
   });
-  return recipients.length;
+  return { count: recipients.length, id, vendorIds: recipients.map((r) => r.vendorId) };
 }
 
 export async function setUpdatePinned(id: string, pinned: boolean) {
@@ -559,9 +560,20 @@ export async function invitePartner(marketId: string, partnerId: string) {
   const p = store().partners.find((x) => x.id === partnerId && x.marketId === marketId);
   if (!p) throw new Error("Partner not found.");
   p.invitedAt = new Date().toISOString();
+  return clone(p);
 }
 
 export async function removeMarketPartner(marketId: string, partnerId: string) {
   const s = store();
   s.partners = s.partners.filter((p) => !(p.id === partnerId && p.marketId === marketId));
+}
+
+/**
+ * Who to email about these vendors: their contacts' addresses. For updates, people who've turned off
+ * update emails are left out; invites and reminders always go.
+ */
+export async function emailTargets(vendorIds: string[], purpose: "update" | "always"): Promise<{ vendorId: string; email: string; name: string }[]> {
+  return store()
+    .vendors.filter((v) => vendorIds.includes(v.id))
+    .flatMap((v) => v.contacts.filter((c) => purpose === "always" || c.emailUpdates).map((c) => ({ vendorId: v.id, email: c.email, name: c.name })));
 }
