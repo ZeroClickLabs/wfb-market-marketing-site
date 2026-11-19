@@ -60,7 +60,7 @@ export async function submitApplication(input: { answers: Answers; uploadId: str
 
   // The application is saved either way; a failed email is only logged (without addresses).
   try {
-    await sendApplicationEmails({ id, business: a.business, name: a.name, email: a.email, town: a.town, category: a.category, markets: a.markets });
+    await sendApplicationEmails({ id, business: a.business, name: a.name, email: a.email, town: a.town, category: a.category });
   } catch (e) {
     console.error("Application emails failed:", e instanceof Error ? e.message : e);
   }

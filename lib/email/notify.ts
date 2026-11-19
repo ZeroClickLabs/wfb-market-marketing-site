@@ -31,7 +31,7 @@ export async function sendReminders(date: { id: string; date: string; market: { 
 }
 
 /** A new application from /apply: a notice to every admin and a thank-you to the applicant. */
-export async function sendApplicationEmails(a: { id: string; business: string; name: string; email: string; town: string; category: string; markets: string[] }) {
+export async function sendApplicationEmails(a: { id: string; business: string; name: string; email: string; town: string; category: string }) {
   const admins = [...new Set((await data.adminEmails()).map((e) => e.toLowerCase()))];
   return sendEmails([...admins.map((to) => applicationNotice(to, a)), applicationReceived(a.email, a.name, a.business)]);
 }

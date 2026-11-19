@@ -437,10 +437,10 @@ export async function submitApplication(a: ApplicationData, uploadId: string | n
     ok(await db.from("vendor_contacts").insert({ vendor_id: v.id, name: a.name, email: a.email.toLowerCase(), phone: a.phone || null, is_primary: true }));
     const row = must(await db.from("vendor_applications").insert({
       vendor_id: v.id, business_name: a.business, contact_name: a.name, email: a.email.toLowerCase(), phone: a.phone || null,
-      town: a.town, category: a.category, products: a.products, markets: a.markets, insurance_confirmed: a.insurance,
+      town: a.town, category: a.category, products: a.products,
       instagram: a.instagram || null, website: a.website || null, photo_paths: photoPaths,
       needs_power: a.needsPower === "yes", needs_vehicle: a.needsVehicle === "yes", stall_size: a.stallSize,
-      other_markets: a.otherMarkets || null, years_selling: a.yearsSelling, tokens_agreed: a.tokens,
+      other_markets: a.otherMarkets || null, years_selling: a.yearsSelling,
     }).select("id").single());
     return row.id;
   } catch (e) {

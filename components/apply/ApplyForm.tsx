@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from "react";
-import { Button, Checkbox, Notice, Select, TextField } from "@/components/wfb";
+import { Button, Notice, Select, TextField } from "@/components/wfb";
 import { cx } from "@/components/wfb/utils";
 import { createClient } from "@/lib/supabase/client";
 import { preparePhotoUpload, submitApplication } from "@/app/apply/actions";
 import {
-  APPLY_CATEGORIES, APPLY_MARKETS, EMPTY_ANSWERS, MAX_PHOTOS, STALL_SIZES, STEPS, YEARS_SELLING, fieldErrors, websiteUrl, type Answers,
+  APPLY_CATEGORIES, EMPTY_ANSWERS, MAX_PHOTOS, STALL_SIZES, STEPS, YEARS_SELLING, fieldErrors, websiteUrl, type Answers,
 } from "@/lib/apply/schema";
 
 // The vendor application: five short steps, checked one at a time, then a confirmation. Built for a
@@ -41,7 +41,7 @@ const stepFromUrl = () => {
   return Number.isInteger(n) && n >= 1 && n <= STEPS.length ? n - 1 : 0;
 };
 
-export function ApplyForm({ moreInfoHref, instagramHref }: { moreInfoHref: string; instagramHref?: string }) {
+export function ApplyForm({ instagramHref }: { instagramHref?: string }) {
   const [answers, setAnswers] = useState<Answers>(EMPTY_ANSWERS);
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -205,10 +205,11 @@ export function ApplyForm({ moreInfoHref, instagramHref }: { moreInfoHref: strin
         <h2 ref={heading} tabIndex={-1} className="m-0 font-display text-[44px] leading-[46px] font-normal uppercase outline-none max-tablet:text-[38px] max-tablet:leading-[40px]">Thanks, {done}</h2>
         <p className="m-0 font-sans text-[18px] leading-[28px]">We&rsquo;ve got your application. Our vendor committee reads every one, and we&rsquo;ll be in touch within two weeks.</p>
         <p className="m-0 font-sans text-[16px] leading-[25px] text-ink-muted">We&rsquo;ve also sent a copy of what happens next to your email.</p>
-        <div className="flex flex-wrap gap-3">
-          <Button variant="primary" href={moreInfoHref}>What selling here involves</Button>
-          {instagramHref ? <Button variant="outline" href={instagramHref}>Follow us on Instagram</Button> : null}
-        </div>
+        {instagramHref ? (
+          <div className="flex flex-wrap gap-3">
+            <Button variant="outline" href={instagramHref}>Follow us on Instagram</Button>
+          </div>
+        ) : null}
       </div>
     );
   }
@@ -292,13 +293,6 @@ export function ApplyForm({ moreInfoHref, instagramHref }: { moreInfoHref: strin
 
       {current.key === "stall" ? (
         <>
-          <Group name="markets" legend="Which markets interest you?" hint="The Summer Market comes first; the others are still being planned." error={err("markets")}>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(min(220px,100%),1fr))] gap-x-5">
-              {APPLY_MARKETS.map((m) => (
-                <Checkbox key={m} name="markets" value={m} label={m} checked={answers.markets.includes(m)} onChange={(e) => set("markets", e.target.checked ? [...answers.markets, m] : answers.markets.filter((x) => x !== m))} />
-              ))}
-            </div>
-          </Group>
           <YesNo name="needsPower" legend="Do you need power at your stall?" value={answers.needsPower} onChange={(v) => set("needsPower", v)} error={err("needsPower")} />
           <YesNo name="needsVehicle" legend="Does your vehicle need to stay at your stall?" value={answers.needsVehicle} onChange={(v) => set("needsVehicle", v)} error={err("needsVehicle")} />
           <div {...field("stallSize")}><Select name="stallSize" label="Stall size" required options={[...STALL_SIZES]} placeholder="Choose one" value={answers.stallSize} onChange={(e) => set("stallSize", e.target.value)} error={err("stallSize")} /></div>
@@ -307,27 +301,7 @@ export function ApplyForm({ moreInfoHref, instagramHref }: { moreInfoHref: strin
         </>
       ) : null}
 
-      {current.key === "review" ? (
-        <>
-          <Review answers={answers} photos={photos.filter((p) => p.status === "done").length} onEdit={goTo} />
-          <div className="grid gap-1" {...field("insurance")}>
-            <Checkbox name="insurance" label="I have, or will get, product liability insurance before the season starts." checked={answers.insurance} onChange={(e) => set("insurance", e.target.checked)} aria-invalid={err("insurance") ? true : undefined} aria-describedby={err("insurance") ? "insurance-err" : undefined} />
-            {err("insurance") ? <p className="wfb-field-error m-0" id="insurance-err">{err("insurance")}</p> : null}
-          </div>
-          <div className="grid gap-1" {...field("tokens")}>
-            <Checkbox
-              name="tokens"
-              label="I'll accept market tokens."
-              hint="Tokens are how shoppers using SNAP/EBT and Market Match pay at the Market."
-              checked={answers.tokens}
-              onChange={(e) => set("tokens", e.target.checked)}
-              aria-invalid={err("tokens") ? true : undefined}
-              aria-describedby={err("tokens") ? "tokens-err" : undefined}
-            />
-            {err("tokens") ? <p className="wfb-field-error m-0" id="tokens-err">{err("tokens")}</p> : null}
-          </div>
-        </>
-      ) : null}
+      {current.key === "review" ? <Review answers={answers} photos={photos.filter((p) => p.status === "done").length} onEdit={goTo} /> : null}
 
       <div className="flex flex-wrap items-center gap-3 border-0 border-t-2 border-dashed border-hairline pt-5">
         {step > 0 ? <Button type="button" variant="outline" onClick={() => goTo(step - 1)} disabled={sending}>Back</Button> : null}
@@ -393,7 +367,7 @@ function Review({ answers: a, photos, onEdit }: { answers: Answers; photos: numb
     {
       step: 3,
       rows: [
-        ["Markets", a.markets.join(", ")], ["Power", yesNo(a.needsPower)], ["Vehicle at the stall", yesNo(a.needsVehicle)], ["Stall size", a.stallSize],
+        ["Power", yesNo(a.needsPower)], ["Vehicle at the stall", yesNo(a.needsVehicle)], ["Stall size", a.stallSize],
         ["Selling for", a.yearsSelling], ["Also sells at", a.otherMarkets || "Not given"],
       ],
     },

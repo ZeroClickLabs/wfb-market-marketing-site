@@ -101,9 +101,9 @@ export function attendanceReminder(to: string, d: { id: string; date: string; ma
 }
 
 /** Tells an admin that someone applied to sell, with a link to the application. */
-export function applicationNotice(to: string, a: { id: string; business: string; name: string; town: string; category: string; markets: string[] }): Email {
+export function applicationNotice(to: string, a: { id: string; business: string; name: string; town: string; category: string }): Email {
   const href = `${siteUrl()}/admin/applications/${a.id}`;
-  const facts = `${a.category} · ${a.town} · ${a.markets.join(", ")}`;
+  const facts = `${a.category} · ${a.town}`;
   return {
     to,
     subject: `New vendor application: ${a.business}`,
@@ -119,7 +119,7 @@ export function applicationNotice(to: string, a: { id: string; business: string;
 
 /** Thanks an applicant and says what happens next. */
 export function applicationReceived(to: string, name: string, business: string): Email {
-  const href = `${siteUrl()}/get-involved/sell`;
+  const href = siteUrl();
   return {
     to,
     subject: "We got your application",
@@ -130,9 +130,9 @@ export function applicationReceived(to: string, name: string, business: string):
         `We've received the application for <strong>${esc(business)}</strong>. Our vendor committee reads every one.`,
         "Here's what happens next: we'll be in touch within two weeks. If it looks like a fit, a volunteer will arrange a visit to your farm or kitchen. We confirm stalls in the spring.",
       ],
-      button: { label: "What selling here involves", href },
+      button: { label: "Visit our website", href },
       footer: "You're getting this because you applied to sell at the Whitefish Bay Farmers Market.",
     }),
-    text: `Hi ${name},\n\nWe've received the application for ${business}. Our vendor committee reads every one.\n\nWhat happens next: we'll be in touch within two weeks. If it looks like a fit, a volunteer will arrange a visit to your farm or kitchen. We confirm stalls in the spring.\n\nWhat selling here involves: ${href}\n`,
+    text: `Hi ${name},\n\nWe've received the application for ${business}. Our vendor committee reads every one.\n\nWhat happens next: we'll be in touch within two weeks. If it looks like a fit, a volunteer will arrange a visit to your farm or kitchen. We confirm stalls in the spring.\n\nOur website: ${href}\n`,
   };
 }

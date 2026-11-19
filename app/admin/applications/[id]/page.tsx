@@ -22,14 +22,14 @@ export default async function ApplicationPage({ params }: PageProps<"/admin/appl
     ["Mainly sells", a.category],
     ["Instagram", a.instagram ? <a key="ig" className="tap-target brand-link" href={`https://www.instagram.com/${encodeURIComponent(a.instagram)}/`} target="_blank" rel="noopener noreferrer">@{a.instagram}</a> : "Not given"],
     ["Website", a.website ? <a key="web" className="tap-target brand-link break-all" href={a.website} target="_blank" rel="noopener noreferrer nofollow">{a.website.replace(/^https?:\/\//, "")}</a> : "Not given"],
-    ["Interested in", a.markets.join(", ")],
+    ...(a.markets.length ? ([["Interested in", a.markets.join(", ")]] as [string, string][]) : []),
     ...(a.stallSize ? ([["Stall size", a.stallSize]] as [string, string][]) : []),
     ...(a.needsPower !== undefined ? ([["Needs power", a.needsPower ? "Yes" : "No"]] as [string, string][]) : []),
     ...(a.needsVehicle !== undefined ? ([["Vehicle at the stall", a.needsVehicle ? "Yes" : "No"]] as [string, string][]) : []),
     ...(a.yearsSelling ? ([["Selling for", a.yearsSelling]] as [string, string][]) : []),
     ["Also sells at", a.otherMarkets ?? "Not given"],
-    ["Insurance", a.insuranceConfirmed ? "Confirmed they have, or will get, product liability insurance" : "Not confirmed"],
-    ["Market tokens", a.tokensAgreed ? "Agreed to accept market tokens" : "Not asked (an earlier form)"],
+    ...(a.insuranceConfirmed ? ([["Insurance", "Confirmed they have, or will get, product liability insurance"]] as [string, string][]) : []),
+    ...(a.tokensAgreed ? ([["Market tokens", "Agreed to accept market tokens"]] as [string, string][]) : []),
   ];
   return (
     <PortalFrame user={user} nav={ADMIN_NAV} current="/admin/applications">

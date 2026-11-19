@@ -5,7 +5,6 @@ import { CATEGORY_LABELS } from "@/components/wfb/Status";
 // and the server checks the whole application again with `Application` before saving it.
 
 export const APPLY_CATEGORIES = Object.values(CATEGORY_LABELS);
-export const APPLY_MARKETS = ["Summer Market", "Night Market", "Pop-Up Markets", "Winter Market"] as const;
 export const STALL_SIZES = ["10 × 10 ft", "10 × 20 ft", "I'd like to share a stall"] as const;
 export const YEARS_SELLING = ["Just starting out", "Less than a year", "1 to 3 years", "More than 3 years"] as const;
 
@@ -65,7 +64,6 @@ const SHOW_US = "Add a photo, your Instagram or a website so we can see your wor
 const showsWork = (d: { instagram: string; website: string; photos: string[] }) => Boolean(d.instagram || d.website || d.photos.length);
 
 const stall = z.object({
-  markets: z.array(z.enum(APPLY_MARKETS)).min(1, "Choose at least one market."),
   needsPower: yesNo,
   needsVehicle: yesNo,
   stallSize: z.enum(STALL_SIZES, { error: "Choose a stall size." }),
@@ -73,17 +71,15 @@ const stall = z.object({
   yearsSelling: z.enum(YEARS_SELLING, { error: "Choose how long you've been selling." }),
 });
 
-const review = z.object({
-  insurance: z.literal(true, { error: "Tick this box to confirm you'll have insurance." }),
-  tokens: z.literal(true, { error: "Tick this box to confirm you'll accept market tokens." }),
-});
+/** The last step only shows the answers back; nothing new is asked. */
+const review = z.object({});
 
 /** One schema per step, in order. A step's errors are keyed by field name; "work" is the show-us rule. */
 export const STEPS = [
   { key: "you", title: "About you", schema: you },
   { key: "business", title: "Your business", schema: business },
   { key: "work", title: "Show us your work", schema: workShape.refine(showsWork, { message: SHOW_US, path: ["work"] }) },
-  { key: "stall", title: "Markets and your stall", schema: stall },
+  { key: "stall", title: "Your stall", schema: stall },
   { key: "review", title: "Check and send", schema: review },
 ] as const;
 
@@ -103,19 +99,16 @@ export interface Answers {
   instagram: string;
   website: string;
   photos: string[];
-  markets: string[];
   needsPower: string;
   needsVehicle: string;
   stallSize: string;
   otherMarkets: string;
   yearsSelling: string;
-  insurance: boolean;
-  tokens: boolean;
 }
 
 export const EMPTY_ANSWERS: Answers = {
   name: "", email: "", phone: "", business: "", town: "", category: "", products: "", instagram: "", website: "", photos: [],
-  markets: [], needsPower: "", needsVehicle: "", stallSize: "", otherMarkets: "", yearsSelling: "", insurance: false, tokens: false,
+  needsPower: "", needsVehicle: "", stallSize: "", otherMarkets: "", yearsSelling: "",
 };
 
 /** Field errors from a failed check: the first message for each field. */

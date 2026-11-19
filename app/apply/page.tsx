@@ -38,15 +38,12 @@ export default function ApplyPage() {
         <p className="m-0 font-script text-[28px] leading-[34px] text-heirloom-text">Grow it, bake it, make it</p>
         <h1 className="mt-1 mb-2 font-display text-[56px] leading-[56px] font-normal uppercase max-tablet:text-[46px] max-tablet:leading-[46px]">Apply to sell</h1>
         <p className="mt-0 mb-3 max-w-(--prose-max) text-[18px] leading-[28px]">Applications for the 2027 season are open. It takes about five minutes, and you can come back to it on this phone or computer.</p>
-        <ul className="mt-0 mb-5 grid gap-1 pl-5 text-[16px] leading-[25px]">
+        <ul className="mt-0 mb-6 grid gap-1 pl-5 text-[16px] leading-[25px]">
           {FACTS.map((f) => <li key={f}>{f}</li>)}
         </ul>
-        <p className="mt-0 mb-6 text-[16px] leading-[25px]">
-          <SmartLink href="/get-involved/sell" className="tap-target brand-link font-bold">Stall fees and how it works</SmartLink>
-        </p>
 
         <div className="box-border rounded-lg border-3 border-solid border-ink bg-paper p-6 shadow-print max-tablet:px-4 max-tablet:py-5">
-          <ApplyForm moreInfoHref="/get-involved/sell" instagramHref={instagram} />
+          <ApplyForm instagramHref={instagram} />
         </div>
       </main>
 

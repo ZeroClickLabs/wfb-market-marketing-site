@@ -228,9 +228,9 @@ export async function submitApplication(a: ApplicationData, _uploadId: string | 
   });
   s.applications.push({
     id, submittedAt: now, business: a.business, name: a.name, email: a.email.toLowerCase(), phone: a.phone || undefined, town: a.town, category: a.category,
-    products: a.products, markets: a.markets, status: "new", vendorId, instagram: a.instagram || undefined, website: a.website || undefined, photos: [],
+    products: a.products, markets: [], status: "new", vendorId, instagram: a.instagram || undefined, website: a.website || undefined, photos: [],
     needsPower: a.needsPower === "yes", needsVehicle: a.needsVehicle === "yes", stallSize: a.stallSize, otherMarkets: a.otherMarkets || undefined,
-    yearsSelling: a.yearsSelling, insuranceConfirmed: a.insurance, tokensAgreed: a.tokens,
+    yearsSelling: a.yearsSelling, insuranceConfirmed: false, tokensAgreed: false,
   });
   return id;
 }
