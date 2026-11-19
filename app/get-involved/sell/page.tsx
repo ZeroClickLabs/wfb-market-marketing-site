@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { SectionHeading } from "@/components/wfb";
-import { Band, CardGrid, DataTable, Edge, InfoCard, PageIntro, SiteShell, Steps, StubForm } from "@/components/site";
-import { applySteps, sellFees, sellFields, sellRules } from "@/content/get-involved";
+import { Button, SectionHeading } from "@/components/wfb";
+import { Band, CardGrid, DataTable, Edge, InfoCard, PageIntro, SiteShell, Steps } from "@/components/site";
+import { applySteps, sellFees, sellRules } from "@/content/get-involved";
 
 export const metadata: Metadata = {
   title: "Sell with us",
-  description: "Applications for the 2027 season open in January. We welcome growers and makers from within 100 miles of Whitefish Bay.",
+  description: "Applications for the 2027 season are open. We welcome growers and makers from within 100 miles of Whitefish Bay.",
 };
 
 export default function SellPage() {
   return (
     <SiteShell section="get-involved">
-      <PageIntro eyebrow="Grow it, bake it, make it" title="Sell with us" lead="Applications for the 2027 season open in January. We welcome growers, bakers and makers from within 100 miles of the lake." />
+      <PageIntro eyebrow="Grow it, bake it, make it" title="Sell with us" lead="Applications for the 2027 season are open. We welcome growers, bakers and makers from within 100 miles of the lake." actions={<Button variant="accent" iconAfter="arrow-right" href="/apply">Apply now</Button>} />
       <Edge from="kraft" to="canvas" />
       <Band ground="canvas">
         <SectionHeading eyebrow="The ground rules" title="Who sells here" />
@@ -31,8 +31,10 @@ export default function SellPage() {
       </Band>
       <Edge from="deep" to="kraft" />
       <Band ground="kraft" id="apply">
-        <SectionHeading eyebrow="Tell us about you" title="Apply to sell" />
-        <StubForm title="Vendor application" fields={sellFields} submitLabel="Send application" emailSubject="Vendor application" />
+        <SectionHeading eyebrow="Tell us about you" title="Apply to sell" lead="Five short steps: about you, your business, your work, your stall, and a final check. It takes about five minutes." />
+        <div className="flex justify-center">
+          <Button variant="accent" iconAfter="arrow-right" href="/apply">Start your application</Button>
+        </div>
       </Band>
     </SiteShell>
   );

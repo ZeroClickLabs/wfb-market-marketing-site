@@ -5,7 +5,7 @@ import { markets } from "@/content/markets";
 import { site } from "@/content/site";
 import { vendors } from "@/content/vendors";
 
-const PAGES = ["", argoPath, "/visit", "/vendors", "/events", "/food-access", "/get-involved", "/get-involved/volunteer", "/get-involved/sell", "/get-involved/sponsor", "/contact", "/privacy", "/accessibility"];
+const PAGES = ["", argoPath, "/visit", "/vendors", "/events", "/food-access", "/get-involved", "/get-involved/volunteer", "/get-involved/sell", "/apply", "/get-involved/sponsor", "/contact", "/privacy", "/accessibility"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

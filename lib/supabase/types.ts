@@ -501,15 +501,24 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          instagram: string | null
           insurance_confirmed: boolean
           markets: string[]
+          needs_power: boolean | null
+          needs_vehicle: boolean | null
+          other_markets: string | null
           phone: string | null
+          photo_paths: string[]
           products: string | null
           reviewed_at: string | null
           reviewed_by: string | null
+          stall_size: string | null
           status: Database["public"]["Enums"]["application_status"]
+          tokens_agreed: boolean
           town: string | null
           vendor_id: string | null
+          website: string | null
+          years_selling: string | null
         }
         Insert: {
           business_name: string
@@ -518,15 +527,24 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          instagram?: string | null
           insurance_confirmed?: boolean
           markets?: string[]
+          needs_power?: boolean | null
+          needs_vehicle?: boolean | null
+          other_markets?: string | null
           phone?: string | null
+          photo_paths?: string[]
           products?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          stall_size?: string | null
           status?: Database["public"]["Enums"]["application_status"]
+          tokens_agreed?: boolean
           town?: string | null
           vendor_id?: string | null
+          website?: string | null
+          years_selling?: string | null
         }
         Update: {
           business_name?: string
@@ -535,15 +553,24 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          instagram?: string | null
           insurance_confirmed?: boolean
           markets?: string[]
+          needs_power?: boolean | null
+          needs_vehicle?: boolean | null
+          other_markets?: string | null
           phone?: string | null
+          photo_paths?: string[]
           products?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          stall_size?: string | null
           status?: Database["public"]["Enums"]["application_status"]
+          tokens_agreed?: boolean
           town?: string | null
           vendor_id?: string | null
+          website?: string | null
+          years_selling?: string | null
         }
         Relationships: [
           {

@@ -6,6 +6,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Database } from "@/lib/supabase/types";
+import { CATEGORY_LABELS } from "@/components/wfb/Status";
+import { photoFolder, type ApplicationData } from "@/lib/apply/schema";
 import type { DateTemplate, Logistics, MarketSummary, VendorFilter } from "./data-demo";
 import type {
   AdminApplication, AdminContact, AdminNote, AdminUpdate, AdminVendor, Audience, DateCounts, EventNote, EventTask, MarketDate, MarketPartner,
@@ -324,6 +326,16 @@ function toApplication(a: Row<"vendor_applications">): AdminApplication {
     markets: a.markets,
     status: a.status,
     vendorId: a.vendor_id ?? "",
+    instagram: opt(a.instagram),
+    website: opt(a.website),
+    photos: [],
+    needsPower: a.needs_power ?? undefined,
+    needsVehicle: a.needs_vehicle ?? undefined,
+    stallSize: opt(a.stall_size),
+    otherMarkets: opt(a.other_markets),
+    yearsSelling: opt(a.years_selling),
+    insuranceConfirmed: a.insurance_confirmed,
+    tokensAgreed: a.tokens_agreed,
   };
 }
 
@@ -394,7 +406,61 @@ export async function listApplications(): Promise<AdminApplication[]> {
 export async function getApplication(id: string) {
   const db = await createClient();
   const a = maybe(await db.from("vendor_applications").select("*").eq("id", id).maybeSingle());
-  return a ? toApplication(a) : null;
+  if (!a) return null;
+  const photos = a.photo_paths.length ? must(await db.storage.from(BUCKET).createSignedUrls(a.photo_paths, SIGNED_URL_SECONDS)) : [];
+  return {
+    ...toApplication(a),
+    photos: photos.flatMap((p) => (p.signedUrl ? [{ url: p.signedUrl, name: (p.path ?? "").split("/").pop()!.replace(/^\d+-/, "") }] : [])),
+  };
+}
+
+/**
+ * Saves an application from the public form at /apply: a vendor lead (status "applied") with the
+ * applicant as its primary contact, and the application itself. Nobody is signed in, so this uses the
+ * secret key; the caller has already checked the answers. Photos are kept only if they're really in
+ * the upload's folder. Returns the application's id.
+ */
+export async function submitApplication(a: ApplicationData, uploadId: string | null) {
+  const db = createAdminClient();
+  let photoPaths: string[] = [];
+  if (uploadId && a.photos.length) {
+    const folder = photoFolder(uploadId);
+    const stored = new Set(must(await db.storage.from(BUCKET).list(folder.slice(0, -1), { limit: 100 })).map((o) => `${folder}${o.name}`));
+    photoPaths = a.photos.filter((p) => stored.has(p));
+  }
+  const category = Object.entries(CATEGORY_LABELS).find(([, label]) => label === a.category)?.[0] ?? "other";
+  const v = must(await db.from("vendors").insert({
+    name: a.business, town: a.town, categories: [category], status: "applied", source: "application",
+    email: a.email.toLowerCase(), phone: a.phone || null, website: a.website || null, instagram: a.instagram || null,
+  }).select("id").single());
+  try {
+    ok(await db.from("vendor_contacts").insert({ vendor_id: v.id, name: a.name, email: a.email.toLowerCase(), phone: a.phone || null, is_primary: true }));
+    const row = must(await db.from("vendor_applications").insert({
+      vendor_id: v.id, business_name: a.business, contact_name: a.name, email: a.email.toLowerCase(), phone: a.phone || null,
+      town: a.town, category: a.category, products: a.products, markets: a.markets, insurance_confirmed: a.insurance,
+      instagram: a.instagram || null, website: a.website || null, photo_paths: photoPaths,
+      needs_power: a.needsPower === "yes", needs_vehicle: a.needsVehicle === "yes", stall_size: a.stallSize,
+      other_markets: a.otherMarkets || null, years_selling: a.yearsSelling, tokens_agreed: a.tokens,
+    }).select("id").single());
+    return row.id;
+  } catch (e) {
+    await db.from("vendors").delete().eq("id", v.id);
+    throw e;
+  }
+}
+
+/** A one-time link for an applicant's browser to upload a photo, under the application's own folder. */
+export async function startApplicationPhotoUpload(uploadId: string, fileName: string) {
+  const db = createAdminClient();
+  const path = `${photoFolder(uploadId)}${Date.now()}-${fileName.replace(/[^\w.-]+/g, "-").slice(-80)}`;
+  const { token } = must(await db.storage.from(BUCKET).createSignedUploadUrl(path));
+  return { path, token };
+}
+
+/** The Market's admins, for new-application notices. */
+export async function adminEmails() {
+  const db = createAdminClient();
+  return must(await db.from("admin_allowlist").select("email")).map((r) => r.email);
 }
 
 export async function decideApplication(id: string, approve: boolean, author: string) {

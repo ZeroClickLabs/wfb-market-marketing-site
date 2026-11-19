@@ -145,6 +145,17 @@ export interface AdminApplication {
   markets: string[];
   status: "new" | "approved" | "declined";
   vendorId: string;
+  instagram?: string;
+  website?: string;
+  /** Signed links to the applicant's photos; filled in only when one application is opened. */
+  photos: { url: string; name: string }[];
+  needsPower?: boolean;
+  needsVehicle?: boolean;
+  stallSize?: string;
+  otherMarkets?: string;
+  yearsSelling?: string;
+  insuranceConfirmed: boolean;
+  tokensAgreed: boolean;
 }
 
 /** A market date without any one vendor's answer. */

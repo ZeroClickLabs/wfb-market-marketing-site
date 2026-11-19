@@ -168,14 +168,17 @@ function seed(): DemoState {
     {
       id: "app-sprout", submittedAt: "2026-10-26T21:05:00Z", business: "Little Sprout Microgreens", name: "Amy Tran", email: "amy@example.com", town: "Glendale, WI",
       category: "Produce", products: "Pea shoots, sunflower and radish microgreens grown indoors year-round. Sold in compostable clamshells.", markets: ["Summer Market", "Winter Market"], status: "new", vendorId: "v-sprout",
+      instagram: "littlesproutgreens", photos: [], needsPower: false, needsVehicle: false, stallSize: "10 × 10 ft", yearsSelling: "1 to 3 years", otherMarkets: "Tosa Farmers Market", insuranceConfirmed: true, tokensAgreed: true,
     },
     {
       id: "app-pasture", submittedAt: "2026-10-25T18:20:00Z", business: "Ozaukee Pasture Meats", name: "Luis Ortega", email: "luis@example.com", phone: "(262) 555-0131", town: "Fredonia, WI",
       category: "Meat & eggs", products: "Grass-fed beef and pastured pork, USDA inspected, sold frozen from chest freezers. Pastured eggs in season.", markets: ["Summer Market", "Night Market"], status: "new", vendorId: "v-pasture",
+      website: "https://example.com", photos: [], needsPower: true, needsVehicle: true, stallSize: "10 × 20 ft", yearsSelling: "More than 3 years", insuranceConfirmed: true, tokensAgreed: true,
     },
     {
       id: "app-hearth", submittedAt: "2026-09-27T16:00:00Z", business: "Hearth & Crumb Bakery", name: "Priya Shah", email: "priya@example.com", town: "Shorewood, WI",
       category: "Bakery", products: "Sourdough loaves and laminated pastry from our licensed kitchen.", markets: ["Summer Market", "Winter Market"], status: "approved", vendorId: "v-hearth",
+      photos: [], insuranceConfirmed: true, tokensAgreed: false,
     },
   ];
 

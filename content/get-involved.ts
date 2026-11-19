@@ -42,20 +42,9 @@ export const sellFees = {
 };
 
 export const applySteps = [
-  { title: "Apply in January", text: "Fill in the form below once applications open, with photos of your stall and products." },
+  { title: "Apply online", text: "It takes about five minutes. Add photos of your products or stall, or your Instagram or website." },
   { title: "Meet the committee", text: "A volunteer visits your farm or kitchen to say hello and see your work." },
   { title: "Set up in June", text: "We'll confirm stalls in the spring. On opening day, we'll walk you to your spot." },
-];
-
-export const sellFields: FieldSpec[] = [
-  { kind: "text", name: "business", label: "Business name", required: true, autoComplete: "organization" },
-  { kind: "text", name: "name", label: "Your name", required: true, autoComplete: "name" },
-  { kind: "email", name: "email", label: "Email", required: true, autoComplete: "email", requiredMessage: "Enter your email address." },
-  { kind: "text", name: "town", label: "Where is your farm or kitchen?", hint: "Town and state, like “Cedarburg, WI”.", required: true, requiredMessage: "Enter the town where you grow or make your products." },
-  { kind: "select", name: "category", label: "What do you mainly sell?", required: true, options: ["Produce", "Meat & eggs", "Dairy & cheese", "Bakery", "Prepared food", "Flowers", "Crafts", "Other"] },
-  { kind: "textarea", name: "products", label: "Tell us about your products", hint: "What you grow or make, and how.", required: true, requiredMessage: "Tell us a little about what you sell." },
-  { kind: "checkboxes", name: "markets", label: "Which 2027 markets interest you?", hint: "The Summer Market is first; the others are still being planned.", required: true, requiredMessage: "Choose at least one market.", options: ["Summer Market", "Night Market", "Pop-Up Markets", "Winter Market"] },
-  { kind: "agree", name: "insurance", label: "I have, or will get, product liability insurance before the season starts.", required: true, requiredMessage: "Tick this box to confirm you’ll have insurance." },
 ];
 
 export const sponsorReasons = [

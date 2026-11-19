@@ -20,8 +20,16 @@ export default async function ApplicationPage({ params }: PageProps<"/admin/appl
     ["Phone", a.phone ?? "Not given"],
     ["Where they grow or make", a.town],
     ["Mainly sells", a.category],
+    ["Instagram", a.instagram ? <a key="ig" className="tap-target brand-link" href={`https://www.instagram.com/${encodeURIComponent(a.instagram)}/`} target="_blank" rel="noopener noreferrer">@{a.instagram}</a> : "Not given"],
+    ["Website", a.website ? <a key="web" className="tap-target brand-link break-all" href={a.website} target="_blank" rel="noopener noreferrer nofollow">{a.website.replace(/^https?:\/\//, "")}</a> : "Not given"],
     ["Interested in", a.markets.join(", ")],
-    ["Insurance", "Confirmed they have, or will get, product liability insurance"],
+    ...(a.stallSize ? ([["Stall size", a.stallSize]] as [string, string][]) : []),
+    ...(a.needsPower !== undefined ? ([["Needs power", a.needsPower ? "Yes" : "No"]] as [string, string][]) : []),
+    ...(a.needsVehicle !== undefined ? ([["Vehicle at the stall", a.needsVehicle ? "Yes" : "No"]] as [string, string][]) : []),
+    ...(a.yearsSelling ? ([["Selling for", a.yearsSelling]] as [string, string][]) : []),
+    ["Also sells at", a.otherMarkets ?? "Not given"],
+    ["Insurance", a.insuranceConfirmed ? "Confirmed they have, or will get, product liability insurance" : "Not confirmed"],
+    ["Market tokens", a.tokensAgreed ? "Agreed to accept market tokens" : "Not asked (an earlier form)"],
   ];
   return (
     <PortalFrame user={user} nav={ADMIN_NAV} current="/admin/applications">
@@ -40,6 +48,22 @@ export default async function ApplicationPage({ params }: PageProps<"/admin/appl
           </dl>
           <h3 className="mt-5 mb-1 font-sans text-[16px] font-extrabold">About their products</h3>
           <p className="m-0 max-w-(--prose-max) font-sans text-[16px] leading-[26px] whitespace-pre-line">{a.products}</p>
+          {a.photos.length ? (
+            <>
+              <h3 className="mt-5 mb-2 font-sans text-[16px] font-extrabold">Photos</h3>
+              <ul className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-3 p-0">
+                {a.photos.map((p, i) => (
+                  <li key={p.url}>
+                    <a href={p.url} target="_blank" rel="noopener noreferrer" className="block rounded-md border-2 border-ink bg-kraft p-1 focus-visible:[outline:3px_solid_var(--focus)] focus-visible:[outline-offset:2px]">
+                      {/* eslint-disable-next-line @next/next/no-img-element -- a short-lived signed link to a private file */}
+                      <img src={p.url} alt={`Photo ${i + 1} from ${a.business}`} loading="lazy" className="block aspect-square w-full rounded-sm object-cover" />
+                      <span className="sr-only">(opens full size in a new tab)</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
         </Panel>
         <Panel title="Decision" className="bg-corn-tint max-desktop:order-first">
           {a.status === "new" ? (

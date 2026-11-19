@@ -2,6 +2,8 @@
 // preview. lib/portal/data-live.ts implements the same functions against Supabase; lib/portal/data.ts
 // picks one. Keep the two in step: data.ts checks they have the same shape.
 
+import { CATEGORY_LABELS, type Category } from "@/components/wfb/Status";
+import type { ApplicationData } from "@/lib/apply/schema";
 import { DEMO_VENDOR_ID, demoStore, type DemoState, type StoredUpdate } from "./demo";
 import type {
   AdminApplication, AdminContact, AdminNote, AdminUpdate, AdminVendor, Audience, DateCounts, EventNote, EventTask, MarketDate, MarketPartner,
@@ -209,6 +211,38 @@ export async function getApplication(id: string) {
   const a = store().applications.find((x) => x.id === id);
   return a ? clone(a) : null;
 }
+
+/** The preview's version of saving an application from /apply. Photos need Supabase, so none are kept. */
+/* eslint-disable @typescript-eslint/no-unused-vars -- same signatures as the live versions */
+export async function submitApplication(a: ApplicationData, _uploadId: string | null) {
+  const s = store();
+  const id = newId("app");
+  const vendorId = newId("v");
+  const now = new Date().toISOString();
+  const category = (Object.entries(CATEGORY_LABELS).find(([, label]) => label === a.category)?.[0] ?? "other") as Category;
+  s.vendors.push({
+    id: vendorId, name: a.business, town: a.town, categories: [category], description: "", products: [], website: a.website, instagram: a.instagram, phone: a.phone,
+    profilePublished: false, profilePendingReview: false, status: "applied", source: "application", applicationId: id, createdAt: now, marketIds: [],
+    contacts: [{ id: newId("c"), name: a.name, email: a.email.toLowerCase(), phone: a.phone || undefined, hasLogin: false, emailUpdates: true }],
+    notes: [],
+  });
+  s.applications.push({
+    id, submittedAt: now, business: a.business, name: a.name, email: a.email.toLowerCase(), phone: a.phone || undefined, town: a.town, category: a.category,
+    products: a.products, markets: a.markets, status: "new", vendorId, instagram: a.instagram || undefined, website: a.website || undefined, photos: [],
+    needsPower: a.needsPower === "yes", needsVehicle: a.needsVehicle === "yes", stallSize: a.stallSize, otherMarkets: a.otherMarkets || undefined,
+    yearsSelling: a.yearsSelling, insuranceConfirmed: a.insurance, tokensAgreed: a.tokens,
+  });
+  return id;
+}
+
+export async function startApplicationPhotoUpload(_uploadId: string, _fileName: string): Promise<{ path: string; token: string }> {
+  throw new Error("Photo uploads need Supabase.");
+}
+
+export async function adminEmails(): Promise<string[]> {
+  return [];
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 export async function decideApplication(id: string, approve: boolean, author: string) {
   const s = store();

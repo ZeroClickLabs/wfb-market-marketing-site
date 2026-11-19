@@ -17,7 +17,7 @@ export default function GetInvolvedPage() {
         <SectionHeading eyebrow="Pick a way in" title="Lend a hand" />
         <TileGrid>
           <CircleTile label="Volunteer" illustration="sunflower" tone="bay-tint" note="Help run Christmas at The Argo, then the Summer Market." href="/get-involved/volunteer" />
-          <CircleTile label="Sell with us" illustration="bread" tone="heirloom-tint" note="Applications for 2027 open in January." href="/get-involved/sell" />
+          <CircleTile label="Sell with us" illustration="bread" tone="heirloom-tint" note="Applications for 2027 are open." href="/get-involved/sell" />
           <CircleTile label="Sponsor" illustration="apple" tone="corn" note="Help launch Christmas at The Argo and our first season." href="/get-involved/sponsor" />
         </TileGrid>
       </Band>

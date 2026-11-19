@@ -99,3 +99,40 @@ export function attendanceReminder(to: string, d: { id: string; date: string; ma
     text: `Can you make it?\n\n${d.marketName}\n${when}\nLoad-in from ${formatTime(d.loadInAt)} · ${d.location}\n\nWe haven't heard from you about this date yet. Reply here: ${href}\n`,
   };
 }
+
+/** Tells an admin that someone applied to sell, with a link to the application. */
+export function applicationNotice(to: string, a: { id: string; business: string; name: string; town: string; category: string; markets: string[] }): Email {
+  const href = `${siteUrl()}/admin/applications/${a.id}`;
+  const facts = `${a.category} · ${a.town} · ${a.markets.join(", ")}`;
+  return {
+    to,
+    subject: `New vendor application: ${a.business}`,
+    html: layout({
+      heading: `${esc(a.business)} applied to sell`,
+      paragraphs: [`<strong>${esc(a.name)}</strong> sent an application through the website.`, esc(facts)],
+      button: { label: "Read the application", href },
+      footer: "You're getting this because you're an admin of the Whitefish Bay Farmers Market portal.",
+    }),
+    text: `${a.business} applied to sell\n\n${a.name} sent an application through the website.\n${facts}\n\nRead it: ${href}\n`,
+  };
+}
+
+/** Thanks an applicant and says what happens next. */
+export function applicationReceived(to: string, name: string, business: string): Email {
+  const href = `${siteUrl()}/get-involved/sell`;
+  return {
+    to,
+    subject: "We got your application",
+    html: layout({
+      heading: "Thanks for applying",
+      paragraphs: [
+        `Hi ${esc(name)},`,
+        `We've received the application for <strong>${esc(business)}</strong>. Our vendor committee reads every one.`,
+        "Here's what happens next: we'll be in touch within two weeks. If it looks like a fit, a volunteer will arrange a visit to your farm or kitchen. We confirm stalls in the spring.",
+      ],
+      button: { label: "What selling here involves", href },
+      footer: "You're getting this because you applied to sell at the Whitefish Bay Farmers Market.",
+    }),
+    text: `Hi ${name},\n\nWe've received the application for ${business}. Our vendor committee reads every one.\n\nWhat happens next: we'll be in touch within two weeks. If it looks like a fit, a volunteer will arrange a visit to your farm or kitchen. We confirm stalls in the spring.\n\nWhat selling here involves: ${href}\n`,
+  };
+}

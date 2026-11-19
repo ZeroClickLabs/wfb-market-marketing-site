@@ -33,6 +33,9 @@ export const inviteContact = (...args: Parameters<typeof demo.inviteContact>) =>
 export const publishProfile = (...args: Parameters<typeof demo.publishProfile>) => impl().publishProfile(...args);
 export const listApplications = (...args: Parameters<typeof demo.listApplications>) => impl().listApplications(...args);
 export const getApplication = (...args: Parameters<typeof demo.getApplication>) => impl().getApplication(...args);
+export const submitApplication = (...args: Parameters<typeof demo.submitApplication>) => impl().submitApplication(...args);
+export const startApplicationPhotoUpload = (...args: Parameters<typeof demo.startApplicationPhotoUpload>) => impl().startApplicationPhotoUpload(...args);
+export const adminEmails = (...args: Parameters<typeof demo.adminEmails>) => impl().adminEmails(...args);
 export const decideApplication = (...args: Parameters<typeof demo.decideApplication>) => impl().decideApplication(...args);
 export const listMarkets = (...args: Parameters<typeof demo.listMarkets>) => impl().listMarkets(...args);
 export const getMarket = (...args: Parameters<typeof demo.getMarket>) => impl().getMarket(...args);

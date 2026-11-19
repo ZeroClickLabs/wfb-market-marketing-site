@@ -4,7 +4,7 @@
 import { excerpt } from "@/components/portal/Markdown";
 import * as data from "@/lib/portal/data";
 import { sendEmails } from "./send";
-import { attendanceReminder, partnerInvite, updateNotice, vendorInvite } from "./templates";
+import { applicationNotice, applicationReceived, attendanceReminder, partnerInvite, updateNotice, vendorInvite } from "./templates";
 
 const unique = <T extends { email: string }>(xs: T[]) => [...new Map(xs.map((x) => [x.email.toLowerCase(), x])).values()];
 
@@ -28,4 +28,10 @@ export async function sendUpdateNotices(u: { id: string; title: string; body: st
 export async function sendReminders(date: { id: string; date: string; market: { name: string }; opensAt: string; closesAt: string; loadInAt: string; location: string }, vendorIds: string[]) {
   const targets = unique(await data.emailTargets(vendorIds, "always"));
   return sendEmails(targets.map((t) => attendanceReminder(t.email, { id: date.id, date: date.date, marketName: date.market.name, opensAt: date.opensAt, closesAt: date.closesAt, loadInAt: date.loadInAt, location: date.location })));
+}
+
+/** A new application from /apply: a notice to every admin and a thank-you to the applicant. */
+export async function sendApplicationEmails(a: { id: string; business: string; name: string; email: string; town: string; category: string; markets: string[] }) {
+  const admins = [...new Set((await data.adminEmails()).map((e) => e.toLowerCase()))];
+  return sendEmails([...admins.map((to) => applicationNotice(to, a)), applicationReceived(a.email, a.name, a.business)]);
 }

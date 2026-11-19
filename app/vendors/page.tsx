@@ -53,9 +53,9 @@ export default function VendorsPage() {
 
       <Edge from="canvas" to="kraft" />
       <Band ground="kraft">
-        <SectionHeading eyebrow="Grow it, bake it, make it" title="Sell with us" lead="Applications for the 2027 Summer Market open in January. We're looking for growers and makers from within 100 miles of the lake." />
+        <SectionHeading eyebrow="Grow it, bake it, make it" title="Sell with us" lead="Applications for the 2027 Summer Market are open. We're looking for growers and makers from within 100 miles of the lake." />
         <div className="wfb-row justify-center">
-          <Button variant="outline" iconAfter="arrow-right" href="/get-involved/sell">How to apply</Button>
+          <Button variant="outline" iconAfter="arrow-right" href="/apply">Apply to sell</Button>
         </div>
       </Band>
     </SiteShell>
